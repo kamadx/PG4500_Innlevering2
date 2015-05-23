@@ -20,10 +20,17 @@ namespace PG4500_2015_Innlevering2
 		 TODO: Win
 		 */
 
+		//Point to go to.
+		public double nodeX, nodeY;
+
+		private RobotStatus robotStatus;
+
 		public override void Run()
 		{
 			//Startup - Go to (25, 25) and wait.
-			GoToPoint(25.0, 25.0);
+			nodeX = 25;
+			nodeY = 25;
+			GoToPoint(nodeX, nodeY);
 			Out.Write("#{0}\t{1}\n", Time, "Heading to (25, 25).");
 			WaitFor(new MoveCompleteCondition(this));
 			Out.Write("#{0}\t{1}\n", Time, "Arrived at (" + X.ToString("F") + "," + Y.ToString("F") + ").");
@@ -33,6 +40,12 @@ namespace PG4500_2015_Innlevering2
 			//Main Loop
 			while (true)
 			{
+				
+				if (Velocity == 0)
+				{
+					GoToPoint(nodeX, nodeY);
+					WaitFor(new MoveCompleteCondition(this));
+				}
 				Scan();
 			}
 		}
@@ -54,10 +67,37 @@ namespace PG4500_2015_Innlevering2
 			Execute();
 		}
 
+		public override void OnStatus(StatusEvent e)
+		{
+			robotStatus = e.Status;
+		}
+
 		public override void OnScannedRobot(ScannedRobotEvent e)
 		{
 			double radarTurn = HeadingRadians + e.BearingRadians - RadarHeadingRadians;
 			SetTurnRadarRightRadians(Utils.NormalRelativeAngle(radarTurn));
+
+			if (e.Velocity == 0 && Velocity == 0)
+			{
+				FindEnemyCoords(e);
+			}
+		}
+
+		public void FindEnemyCoords(ScannedRobotEvent e)
+		{
+			double angleToEnemy = e.Bearing;
+
+			// Calculate the angle to the scanned robot
+			double angle = ToRad(robotStatus.Heading + angleToEnemy % 360);
+
+			// Calculate the coordinates of the robot
+			nodeX = (robotStatus.X + Math.Sin(angle) * e.Distance);
+			nodeY = (robotStatus.Y + Math.Cos(angle) * e.Distance);
+		}
+
+		public double ToRad(double angle)
+		{
+			return (Math.PI / 180) * angle;
 		}
 
 
