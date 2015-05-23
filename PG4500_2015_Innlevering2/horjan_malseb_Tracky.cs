@@ -12,6 +12,8 @@ namespace PG4500_2015_Innlevering2
 	public class horjan_malseb_Tracky : AdvancedRobot
 	{
 		/*
+		 TODO: Find target
+		 TODO: DEBUG: Just go target, then wait for new target. Repeat.
 		 TODO: A* Algorithm
 		 TODO: Draw path
 		 TODO: Traverse path
@@ -27,9 +29,12 @@ namespace PG4500_2015_Innlevering2
 			Out.Write("#{0}\t{1}\n", Time, "Arrived at (" + X.ToString("F") + "," + Y.ToString("F") + ").");
 			//SetTurnRight(180);
 
-
+			SetTurnRadarRightRadians(Double.PositiveInfinity);
 			//Main Loop
-
+			while (true)
+			{
+				Scan();
+			}
 		}
 
 		//Instructs the robot to move to a specific place.
@@ -47,6 +52,12 @@ namespace PG4500_2015_Innlevering2
 			WaitFor(new TurnCompleteCondition(this));
 			SetAhead(distance * (angle == turnAngle ? 1 : -1));
 			Execute();
+		}
+
+		public override void OnScannedRobot(ScannedRobotEvent e)
+		{
+			double radarTurn = HeadingRadians + e.BearingRadians - RadarHeadingRadians;
+			SetTurnRadarRightRadians(Utils.NormalRelativeAngle(radarTurn));
 		}
 
 
