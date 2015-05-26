@@ -15,9 +15,17 @@ namespace PG4500_2015_Innlevering2
 		 TODO: Find target <- Done 
 		 TODO: DEBUG: Just go target, then wait for new target. Repeat. <- Done
 		 TODO: A* Algorithm
+         * Use an array for collision map
+         * Check whether the square (50x50) can be traversed
+         * Add next choice to a queue
+         * For cornering (turn 45 deg)
 		 TODO: Draw path
+         * no clue on this part yet
 		 TODO: Traverse path
+         * Follow the queue
+         * Travel either 25 pixels at a time or 50
 		 TODO: Win
+         * W00t
 		 */
 
         /*
