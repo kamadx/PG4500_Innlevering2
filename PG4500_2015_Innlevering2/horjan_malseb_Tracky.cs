@@ -12,8 +12,8 @@ namespace PG4500_2015_Innlevering2
 	public class horjan_malseb_Tracky : AdvancedRobot
 	{
 		/*
-		 TODO: Find target 
-		 TODO: DEBUG: Just go target, then wait for new target. Repeat.
+		 TODO: Find target <- Done 
+		 TODO: DEBUG: Just go target, then wait for new target. Repeat. <- Done
 		 TODO: A* Algorithm
 		 TODO: Draw path
 		 TODO: Traverse path
