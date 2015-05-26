@@ -111,7 +111,11 @@ namespace PG4500_2015_Innlevering2
 			{
 				FindEnemyCoords(e);
                 enemyStopped = true;
-			}
+            }
+            else if (e.Velocity != 0)
+            {
+                enemyStopped = false;
+            }
 		}
 
 		public void FindEnemyCoords(ScannedRobotEvent e)
