@@ -20,13 +20,33 @@ namespace PG4500_2015_Innlevering2
 		 TODO: Win
 		 */
 
-		//Point to go to.
+        /*
+         Collision map
+         0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0
+         0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0
+         1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0
+         1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0
+         0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+         0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0
+         0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0
+         0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0
+         0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0
+         0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+         */
+
+        //Point to go to.
 		public double nodeX, nodeY;
+        public bool enemyStopped;
 
 		private RobotStatus robotStatus;
 
+
+
 		public override void Run()
 		{
+            enemyStopped = false;
 			//Startup - Go to (25, 25) and wait.
 			nodeX = 25;
 			nodeY = 25;
@@ -36,15 +56,25 @@ namespace PG4500_2015_Innlevering2
 			Out.Write("#{0}\t{1}\n", Time, "Arrived at (" + X.ToString("F") + "," + Y.ToString("F") + ").");
 			//SetTurnRight(180);
 
-			SetTurnRadarRightRadians(Double.PositiveInfinity);
+            IsAdjustGunForRobotTurn = true;
+
+            SetTurnRadarRightRadians(Double.PositiveInfinity);
+            Execute();
 			//Main Loop
 			while (true)
 			{
 				
 				if (Velocity == 0)
 				{
-					GoToPoint(nodeX, nodeY);
-					WaitFor(new MoveCompleteCondition(this));
+                    //Force scan
+                    //SetTurnRadarRight(360);
+                    //Execute();
+                    if (enemyStopped)
+                    {
+                        GoToPoint(nodeX, nodeY);
+                    }
+					
+                    //WaitFor(new MoveCompleteCondition(this));
 				}
 				Scan();
 			}
@@ -80,6 +110,7 @@ namespace PG4500_2015_Innlevering2
 			if (e.Velocity == 0 && Velocity == 0)
 			{
 				FindEnemyCoords(e);
+                enemyStopped = true;
 			}
 		}
 
