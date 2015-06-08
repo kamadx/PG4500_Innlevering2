@@ -176,10 +176,11 @@ namespace PG4500_2015_Innlevering2
 
 					openList[1] = openList[numberOfOpenListItems + 1];
 					int v = 1;
+					int u;
 
 					do
 					{
-						int u = v;
+						u = v;
 						if (2 * u + 1 <= numberOfOpenListItems)
 						{
 							if (Fcost[openList[u]] >= Fcost[openList[2 * u]])
@@ -207,11 +208,7 @@ namespace PG4500_2015_Innlevering2
 							openList[u] = openList[v];
 							openList[v] = temp;
 						}
-						else
-						{
-							break;
-						}
-					} while (true);
+					} while (u != v);
 
 					for (int b = parentYval - 1; b <= parentYval + 1; b++)
 					{
