@@ -45,9 +45,9 @@ namespace PG4500_2015_Innlevering2
 
 
 		//Point to go to.
-		public int nodeX, nodeY;
-        public int tilesize = 50;
-		public bool enemyStopped;
+		private int nodeX, nodeY;
+        private int tilesize = 50;
+		private bool enemyStopped;
 
 		private RobotStatus robotStatus;
 
@@ -142,12 +142,5 @@ namespace PG4500_2015_Innlevering2
 			nodeX = (int)(robotStatus.X + Math.Sin(angle) * e.Distance);
 			nodeY = (int)(robotStatus.Y + Math.Cos(angle) * e.Distance);
 		}
-
-		public double ToRad(double angle)
-		{
-			return (Math.PI / 180) * angle;
-		}
-
-
 	}
 }
