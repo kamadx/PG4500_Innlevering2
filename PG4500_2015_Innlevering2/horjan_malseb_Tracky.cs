@@ -223,7 +223,7 @@ namespace PG4500_2015_Innlevering2
 						for (int a = parentXval - 1; a <= parentXval + 1; b++)
                         {
                             Out.Write("Stop Point 5a\n");
-                            if (a != -1 && b != -1 && a != mapWidth && b != mapHeight)
+                            if (a >= 0 && b >= 0 && a <= mapWidth && b <= mapHeight)
                             {
                                 Out.Write("Stop Point 5b\n");
                                 if (whichList[a, b] != onClosedList) //<- FOUND THE BUG
