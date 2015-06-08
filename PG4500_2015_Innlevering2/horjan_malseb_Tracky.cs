@@ -222,11 +222,13 @@ namespace PG4500_2015_Innlevering2
                     {
 						for (int a = parentXval - 1; a <= parentXval + 1; b++)
                         {
-                            Out.Write("Stop Point 5\n");
+                            Out.Write("Stop Point 5a\n");
                             if (a != -1 && b != -1 && a != mapWidth && b != mapHeight)
                             {
-                                if (whichList[a, b] != onClosedList)
+                                Out.Write("Stop Point 5b\n");
+                                if (whichList[a, b] != onClosedList) //<- FOUND THE BUG
                                 {
+                                    Out.Write("Stop Point 5c\n");
                                     if (collisionMap[a, b] != unwalkable)
                                     {
                                         Out.Write("Stop Point 6\n");
@@ -357,6 +359,7 @@ namespace PG4500_2015_Innlevering2
                                                     }
                                                 }
                                             }
+                                            Out.Write("Stop Point After 10b\n");
                                         }
                                     }
                                 }
@@ -371,11 +374,13 @@ namespace PG4500_2015_Innlevering2
                 }
                 if (whichList[targetX, targetY] == onOpenList)
                 {
+                    Out.Write("Stop Point before 15\n");
                     path = found;
                     break;
                 }
+                Out.Write("Stop Point 15\n");
             } while (true);
-            Out.Write("Stop Point 5\n");
+            Out.Write("Stop Point 16\n");
             if (path == found)
             {
                 pathX = targetX;
