@@ -270,12 +270,13 @@ namespace PG4500_2015_Innlevering2
 											int m;
                                             if (whichList[a, b] != onOpenList)
                                             {
+                                                Out.Write("Stop Point 8a\n");
                                                 newOpenListItemID += 1;
                                                 m = numberOfOpenListItems + 1;
                                                 openList[m] = newOpenListItemID;
                                                 openX[newOpenListItemID] = a;
                                                 openY[newOpenListItemID] = b;
-
+                                                Out.Write("Stop Point 8b\n");
                                                 if (Math.Abs(a - parentXval) == 1 && Math.Abs(b - parentYval) == 1)
                                                 {
                                                     addedGCost = 14;
@@ -284,7 +285,8 @@ namespace PG4500_2015_Innlevering2
                                                 {
                                                     addedGCost = 10;
                                                 }
-                                                Gcost[a, b] = Gcost[parentXval, parentYval] + addedGCost;
+                                                Out.Write("Stop Point 8c\n");
+                                                Gcost[a, b] = Gcost[parentXval, parentYval] + addedGCost; // <- THIS FUCKER
                                                 Out.Write("Stop Point 9\n");
                                                 Hcost[openList[m]] = 10 * (Math.Abs(a - targetX) + Math.Abs(b - targetY));
                                                 Fcost[openList[m]] = Gcost[a, b] + Hcost[openList[m]];
