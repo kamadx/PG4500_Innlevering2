@@ -28,25 +28,25 @@ namespace PG4500_2015_Innlevering2
          * W00t
 		 */
 
-        /*
-         Collision map
-         0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0
-         0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0
-         1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0
-         1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0
-         0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-         0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0
-         0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0
-         0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0
-         0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0
-         0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0
-         0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0
-         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-         */
+		/*
+		 Collision map
+		 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0
+		 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0
+		 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0
+		 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0
+		 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0
+		 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0
+		 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0
+		 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0
+		 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0
+		 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		 */
 
-        //Point to go to.
-		public double nodeX, nodeY;
-        public bool enemyStopped;
+		//Point to go to.
+		public int nodeX, nodeY;
+		public bool enemyStopped;
 
 		private RobotStatus robotStatus;
 
@@ -54,35 +54,36 @@ namespace PG4500_2015_Innlevering2
 
 		public override void Run()
 		{
-            enemyStopped = false;
+			enemyStopped = false;
 			//Startup - Go to (25, 25) and wait.
 			nodeX = 25;
 			nodeY = 25;
+			DebugProperty["Headed to"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
 			GoToPoint(nodeX, nodeY);
-			Out.Write("#{0}\t{1}\n", Time, "Heading to (25, 25).");
 			WaitFor(new MoveCompleteCondition(this));
-			Out.Write("#{0}\t{1}\n", Time, "Arrived at (" + X.ToString("F") + "," + Y.ToString("F") + ").");
+			Out.Write("#{0}\t{1}\n", Time, "Arrived at (" + X.ToString() + "," + Y.ToString() + ").");
 			//SetTurnRight(180);
 
-            IsAdjustGunForRobotTurn = true;
+			IsAdjustGunForRobotTurn = true;
 
-            SetTurnRadarRightRadians(Double.PositiveInfinity);
-            Execute();
+			SetTurnRadarRightRadians(Double.PositiveInfinity);
+			Execute();
 			//Main Loop
 			while (true)
 			{
-				
+
 				if (Velocity == 0)
 				{
-                    //Force scan
-                    //SetTurnRadarRight(360);
-                    //Execute();
-                    if (enemyStopped)
-                    {
-                        GoToPoint(nodeX, nodeY);
-                    }
-					
-                    //WaitFor(new MoveCompleteCondition(this));
+					//Force scan
+					//SetTurnRadarRight(360);
+					//Execute();
+					if (enemyStopped)
+					{
+						DebugProperty["Headed to"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
+						GoToPoint(nodeX, nodeY);
+					}
+
+					//WaitFor(new MoveCompleteCondition(this));
 				}
 				Scan();
 			}
@@ -118,12 +119,12 @@ namespace PG4500_2015_Innlevering2
 			if (e.Velocity == 0 && Velocity == 0)
 			{
 				FindEnemyCoords(e);
-                enemyStopped = true;
-            }
-            else if (e.Velocity != 0)
-            {
-                enemyStopped = false;
-            }
+				enemyStopped = true;
+			}
+			else if (e.Velocity != 0)
+			{
+				enemyStopped = false;
+			}
 		}
 
 		public void FindEnemyCoords(ScannedRobotEvent e)
@@ -131,7 +132,8 @@ namespace PG4500_2015_Innlevering2
 			double angleToEnemy = e.Bearing;
 
 			// Calculate the angle to the scanned robot
-			double angle = ToRad(robotStatus.Heading + angleToEnemy % 360);
+			double angle = Utils.ToRadians(robotStatus.Heading + angleToEnemy % 360);
+
 
 			// Calculate the coordinates of the robot
 			nodeX = (robotStatus.X + Math.Sin(angle) * e.Distance);
