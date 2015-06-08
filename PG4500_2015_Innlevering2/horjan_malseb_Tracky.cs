@@ -104,7 +104,13 @@ namespace PG4500_2015_Innlevering2
 					if (enemyStopped)
 					{
 						DebugProperty["Headed to coord"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
-						DebugProperty["Headed to tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
+                       // DebugProperty["Headed to tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
+                        Out.Write("Starting FindPath()");
+                        Thread.Sleep(1);
+                        if (FindPath((int)(X), (int)(Y), nodeX, nodeY) == 1)
+                        {
+                            GoToPoint(25, 25);
+                        }
 						GoToPoint(nodeX, nodeY);
 					}
 
@@ -137,11 +143,13 @@ namespace PG4500_2015_Innlevering2
 	addedGCost = 0, path = 0, pathX, pathY, cellPosition,
 	newOpenListItemID = 0;
 
-			int startX = startingX / tilesize;
-			int startY = startingY / tilesize;
-			targetX /= tilesize;
-			targetY /= tilesize;
+            int startX = (startingX / tilesize) + 1;
+            int startY = (startingY / tilesize) + 1;
+            targetX =  (targetX / tilesize) + 1;
+            targetY = (targetY / tilesize) + 1;
 
+            Out.Write("Found target at tile: [" + targetX + "," + targetY + "]");
+            DebugProperty["Target tile"] = "[" + targetX + "," + targetY + "]";
 			//Not sure why I need this:
 			//Resettings stuff
 			if (onClosedList > 1000000)
@@ -392,12 +400,15 @@ namespace PG4500_2015_Innlevering2
 
 				ReadPath(startingX, startingY);
 			}
+            int tempX = pathBank.Dequeue();
+            int tempY = pathBank.Dequeue();
+            DebugProperty["Path"] = "[" + tempX + "," + tempY + "]";
 			return path;
 		}
 
 		public void ReadPath(int currentX, int currentY)
 		{
-
+            GoToPoint(nodeX, nodeY);
 		}
 
 		public int ReadPathX(int pathLocation)
