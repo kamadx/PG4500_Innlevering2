@@ -1,10 +1,7 @@
-﻿using System;
+﻿using Robocode;
+using Util = Robocode.Util.Utils;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using foo = System.Threading.Tasks;
-using Robocode;
-using Robocode.Util;
 
 
 namespace PG4500_2015_Innlevering2
@@ -100,7 +97,7 @@ namespace PG4500_2015_Innlevering2
 			pointY -= Y;
 
 			double distance = Math.Sqrt(Math.Pow(pointX, 2) + Math.Pow(pointY, 2));
-			double angle = Utils.NormalRelativeAngle(Math.Atan2(pointX, pointY) - HeadingRadians);
+			double angle = Util.NormalRelativeAngle(Math.Atan2(pointX, pointY) - HeadingRadians);
 
 			double turnAngle = Math.Atan(Math.Tan(angle));
 			SetTurnRightRadians(turnAngle);
@@ -117,7 +114,7 @@ namespace PG4500_2015_Innlevering2
 		public override void OnScannedRobot(ScannedRobotEvent e)
 		{
 			double radarTurn = HeadingRadians + e.BearingRadians - RadarHeadingRadians;
-			SetTurnRadarRightRadians(Utils.NormalRelativeAngle(radarTurn));
+			SetTurnRadarRightRadians(Util.NormalRelativeAngle(radarTurn));
 
 			if (e.Velocity == 0 && Velocity == 0)
 			{
@@ -135,7 +132,7 @@ namespace PG4500_2015_Innlevering2
 			double angleToEnemy = e.Bearing;
 
 			// Calculate the angle to the scanned robot
-			double angle = Utils.ToRadians(robotStatus.Heading + angleToEnemy % 360);
+			double angle = Util.ToRadians(robotStatus.Heading + angleToEnemy % 360);
 
 
 			// Calculate the coordinates of the robot
