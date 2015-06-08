@@ -47,6 +47,7 @@ namespace PG4500_2015_Innlevering2
 		//Point to go to.
 		private int nodeX, nodeY;
         private int tilesize = 50;
+        private int walkable = 0, unwalkable = 1;
 		private bool enemyStopped;
 
 		private RobotStatus robotStatus;
