@@ -85,7 +85,7 @@ namespace PG4500_2015_Innlevering2
             DebugProperty["Headed to Tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
             GoToPoint(nodeX, nodeY);
             WaitFor(new MoveCompleteCondition(this));
-            Out.Write("#{0}\t{1}\n", Time, "Arrived at (" + X.ToString() + "," + Y.ToString() + ").");
+            Out.WriteLine("#{0}\t{1}", Time, "Arrived at (" + X.ToString() + "," + Y.ToString() + ").");
             //SetTurnRight(180);
 
             IsAdjustGunForRobotTurn = true;
@@ -105,7 +105,7 @@ namespace PG4500_2015_Innlevering2
                     {
                         DebugProperty["Headed to coord"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
                        // DebugProperty["Headed to tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
-                        Out.Write("Starting FindPath()\n");
+                        Out.WriteLine("Starting FindPath()");
                         if (FindPath((int)(X), (int)(Y), nodeX, nodeY) == 1)
                         {
                             GoToPoint(25, 25);
@@ -147,7 +147,7 @@ namespace PG4500_2015_Innlevering2
             targetX = (targetX / tilesize) + 1;
             targetY = (targetY / tilesize) + 1;
 
-            Out.Write("Found target at tile: [" + targetX + "," + targetY + "]\n");
+            Out.WriteLine("Found target at tile: [" + targetX + "," + targetY + "]");
             DebugProperty["Target Tile"] = "[" + targetX + "," + targetY + "]";
             //Not sure why I need this:
             //Resettings stuff
@@ -165,12 +165,12 @@ namespace PG4500_2015_Innlevering2
             pathLength = 0;//i.e, = not started
             pathLocation = 0;//i.e, = not started
 			Gcost[startX, startY] = 0; //reset starting square's G value to 0
-            Out.Write("Stop Point 1\n");
+            Out.WriteLine("Stop Point 1");
             //Add start location to the open list
             numberOfOpenListItems = 1;
             openList[1] = 1;//assign it as the top (and currently only) item in the open list, which is maintained as a binary heap (explained below)
             openX[1] = startX; openY[1] = startY;
-            Out.Write("Stop Point 2\n");
+            Out.WriteLine("Stop Point 2");
             do
             {
                 if (numberOfOpenListItems != 0)
@@ -183,7 +183,7 @@ namespace PG4500_2015_Innlevering2
 
                     openList[1] = openList[numberOfOpenListItems + 1];
 					int v = 1;
-                    Out.Write("Stop Point 3\n");
+                    Out.WriteLine("Stop Point 3");
 					int u;
 
                     do
@@ -222,16 +222,16 @@ namespace PG4500_2015_Innlevering2
                     {
 						for (int a = parentXval - 1; a <= parentXval + 1; b++)
                         {
-                            Out.Write("Stop Point 5a\n");
+                            Out.WriteLine("Stop Point 5a");
                             if (a >= 0 && b >= 0 && a <= mapWidth && b <= mapHeight)
                             {
-                                Out.Write("Stop Point 5b\n");
+                                Out.WriteLine("Stop Point 5b");
                                 if (whichList[a, b] != onClosedList) //<- FOUND THE BUG
                                 {
-                                    Out.Write("Stop Point 5c\n");
+                                    Out.WriteLine("Stop Point 5c");
                                     if (collisionMap[a, b] != unwalkable)
                                     {
-                                        Out.Write("Stop Point 6\n");
+                                        Out.WriteLine("Stop Point 6");
                                         corner = walkable;
                                         if (a == parentYval - 1)
                                         {
@@ -252,7 +252,7 @@ namespace PG4500_2015_Innlevering2
                                         }
                                         else if (a == parentXval + 1)
                                         {
-                                            Out.Write("Stop Point 7\n");
+                                            Out.WriteLine("Stop Point 7");
                                             if (b == parentYval - 1)
                                             {
                                                 if (collisionMap[parentXval, parentYval - 1] == unwalkable || collisionMap[parentXval + 1, parentYval] == unwalkable)
@@ -266,7 +266,7 @@ namespace PG4500_2015_Innlevering2
                                         }
                                         if (corner == walkable)
                                         {
-                                            Out.Write("Stop Point 8\n");
+                                            Out.WriteLine("Stop Point 8");
 											int m;
                                             if (whichList[a, b] != onOpenList)
                                             {
@@ -285,7 +285,7 @@ namespace PG4500_2015_Innlevering2
                                                     addedGCost = 10;
                                                 }
                                                 Gcost[a, b] = Gcost[parentXval, parentYval] + addedGCost;
-                                                Out.Write("Stop Point 9\n");
+                                                Out.WriteLine("Stop Point 9");
                                                 Hcost[openList[m]] = 10 * (Math.Abs(a - targetX) + Math.Abs(b - targetY));
                                                 Fcost[openList[m]] = Gcost[a, b] + Hcost[openList[m]];
                                                 parentX[a, b] = parentXval;
@@ -299,11 +299,11 @@ namespace PG4500_2015_Innlevering2
                                                         openList[m / 2] = openList[m];
                                                         openList[m] = temp;
                                                         m /= 2;
-                                                        Out.Write("Stop Point 10a\n");
+                                                        Out.WriteLine("Stop Point 10a");
                                                     }
                                                     else
                                                     {
-                                                        Out.Write("Stop Point 10b\n");
+                                                        Out.WriteLine("Stop Point 10b");
                                                         break;
                                                     }
                                                 }
@@ -313,7 +313,7 @@ namespace PG4500_2015_Innlevering2
                                             }
                                             else
                                             {
-                                                Out.Write("Stop Point 11\n");
+                                                Out.WriteLine("Stop Point 11");
                                                 if (Math.Abs(a - parentXval) == 1 && Math.Abs(b - parentYval) == 1)
                                                 {
                                                     addedGCost = 14;
@@ -329,7 +329,7 @@ namespace PG4500_2015_Innlevering2
                                                     parentX[a, b] = parentXval;
                                                     parentY[a, b] = parentYval;
                                                     Gcost[a, b] = tempGcost;
-                                                    Out.Write("Stop Point 12\n");
+                                                    Out.WriteLine("Stop Point 12");
                                                     for (int x = 1; x <= numberOfOpenListItems; x++)
                                                     {
                                                         if (openX[openList[x]] == a && openY[openList[x]] == b)
@@ -339,10 +339,10 @@ namespace PG4500_2015_Innlevering2
                                                             m = x;
                                                             while (m != 1)
                                                             {
-                                                                Out.Write("Stop Point 13\n");
+                                                                Out.WriteLine("Stop Point 13");
                                                                 if (Fcost[openList[m]] < Fcost[openList[m / 2]])
                                                                 {
-                                                                    Out.Write("Stop Point 14a\n");
+                                                                    Out.WriteLine("Stop Point 14a");
                                                                     temp = openList[m / 2];
                                                                     openList[m / 2] = openList[m];
                                                                     openList[m] = temp;
@@ -350,7 +350,7 @@ namespace PG4500_2015_Innlevering2
                                                                 }
                                                                 else
                                                                 {
-                                                                    Out.Write("Stop Point 14b\n");
+                                                                    Out.WriteLine("Stop Point 14b");
                                                                     break;
                                                                 }
                                                             }
@@ -359,14 +359,14 @@ namespace PG4500_2015_Innlevering2
                                                     }
                                                 }
                                             }
-                                            Out.Write("Stop Point After 10b\n");
+                                            Out.WriteLine("Stop Point After 10b");
                                         }
                                     }
                                 }
                             }
 							else
 							{
-								Out.Write("Raise hell! And zombies!");
+								Out.WriteLine("Raise hell! And zombies!");
 							}
                         }
                     }
@@ -378,13 +378,13 @@ namespace PG4500_2015_Innlevering2
                 }
                 if (whichList[targetX, targetY] == onOpenList)
                 {
-                    Out.Write("Stop Point before 15\n");
+                    Out.WriteLine("Stop Point before 15");
                     path = found;
                     break;
                 }
-                Out.Write("Stop Point 15\n");
+                Out.WriteLine("Stop Point 15");
             } while (true);
-            Out.Write("Stop Point 16\n");
+            Out.WriteLine("Stop Point 16");
             if (path == found)
             {
                 pathX = targetX;
@@ -421,7 +421,7 @@ namespace PG4500_2015_Innlevering2
             }
             int tempX = pathBank.Dequeue();
             int tempY = pathBank.Dequeue();
-            Out.Write("Last possible stop point");
+            Out.WriteLine("Last possible stop point");
             DebugProperty["Path"] = "[" + tempX + "," + tempY + "]";
             return path;
         }
