@@ -51,13 +51,19 @@ namespace PG4500_2015_Innlevering2
 		private bool enemyStopped;
 
 
-        private int[] Fcost = new int[mapWidth * mapHeight + 2];
-        private int[,] Gcost = new int[mapWidth + 1, mapHeight + 1];
-        private int[] Hcost = new int[mapWidth * mapHeight + 2];
-        private int[] openList = new int[mapWidth * mapHeight + 2];
-        private int[,] whichList = new int[mapWidth + 1, mapHeight + 1];
-        private int[] openX = new int[mapWidth * mapHeight + 2];
-        private int[] openY = new int[mapWidth * mapHeight + 2];
+        private int[] Fcost = new int[mapWidth * mapHeight + 1];
+        private int[,] Gcost = new int[mapWidth, mapHeight];
+        private int[] Hcost = new int[mapWidth * mapHeight + 1];
+        private int[] openList = new int[mapWidth * mapHeight + 1];
+        private int[,] whichList = new int[mapWidth, mapHeight];
+        private int[] openX = new int[mapWidth * mapHeight + 1];
+        private int[] openY = new int[mapWidth * mapHeight + 1];
+        private int[,] parentX = new int[mapWidth, mapHeight];
+        private int[,] parentY = new int[mapWidth, mapHeight];
+
+        private int pathLength;
+        private int pathLocation;
+        private int onClosedlist = 10;
         
 
         private RobotStatus robotStatus;
@@ -130,6 +136,11 @@ namespace PG4500_2015_Innlevering2
             targetX = targetX / tilesize;
             targetY = targetY / tilesize;
 
+            //Not sure why I need this:
+            //Resettings stuff
+            onClosedList = onClosedList + 2;
+            opOpenList = onClosedList - 1;
+            pathLength
             
 
         }
