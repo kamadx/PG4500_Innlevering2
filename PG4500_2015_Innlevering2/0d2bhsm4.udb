@@ -246,24 +246,7 @@ namespace PG4500_2015_Innlevering2
 
                                                 Hcost[openList[m]] = 10*(Math.Abs(a - targetX) + Math.Abs(b - targetY));
                                                 Fcost[openList[m]] = Gcost[a,b] + Hcost[openList[m]];
-                                                parentX[a,b] = parentXval;
-                                                parentY[a,b] = parentYval;
-
-                                                while (m != 1) {
-                                                    if (Fcost[openList[m]] <= Fcost[openList[m/2]]) {
-                                                        temp = openList[m/2];
-                                                        openList[m/2] = openList[m];
-                                                        openList[m] = temp;
-                                                        m /= 2;
-                                                    } else {
-                                                        break;
-                                                    }
-                                                }
-                                                numberOfOpenListItems += 1;
-
-                                                whichList[a,b] = onOpenList;
-                                            } 
-
+                                            }
                                         }
                                     }
                                 }
