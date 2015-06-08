@@ -104,7 +104,7 @@ namespace PG4500_2015_Innlevering2
                     if (enemyStopped)
                     {
                         DebugProperty["Headed to coord"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
-                        // DebugProperty["Headed to tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
+                       // DebugProperty["Headed to tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
                         Out.Write("Starting FindPath()\n");
                         if (FindPath((int)(X), (int)(Y), nodeX, nodeY) == 1)
                         {
@@ -138,8 +138,8 @@ namespace PG4500_2015_Innlevering2
 
         public int FindPath(int startingX, int startingY, int targetX, int targetY)
         {
-            int onOpenList = 0, parentXval = 0, parentYval = 0, temp = 0, corner = 0, numberOfOpenListItems = 0,
-    addedGCost = 0, path = 0, pathX, pathY, cellPosition,
+			int onOpenList = 0, parentXval = 0, parentYval = 0, temp = 0, corner = 0, numberOfOpenListItems = 0,
+	addedGCost = 0, path = 0, pathX, pathY, cellPosition,
     newOpenListItemID = 0;
 
             int startX = (startingX / tilesize) + 1;
@@ -156,15 +156,15 @@ namespace PG4500_2015_Innlevering2
                 for (int x = 0; x < mapWidth; x++)
                 {
                     for (int y = 0; y < mapHeight; y++)
-                        whichList[x, y] = 0;
+						whichList[x, y] = 0;
                 }
                 onClosedList = 10;
             }
-            onClosedList += 2;
+			onClosedList += 2;
             onOpenList = onClosedList - 1;
             pathLength = 0;//i.e, = not started
             pathLocation = 0;//i.e, = not started
-            Gcost[startX, startY] = 0; //reset starting square's G value to 0
+			Gcost[startX, startY] = 0; //reset starting square's G value to 0
             Out.Write("Stop Point 1\n");
             //Add start location to the open list
             numberOfOpenListItems = 1;
@@ -182,11 +182,13 @@ namespace PG4500_2015_Innlevering2
                     numberOfOpenListItems -= 1;
 
                     openList[1] = openList[numberOfOpenListItems + 1];
-                    int v = 1;
+					int v = 1;
                     Out.Write("Stop Point 3\n");
+					int u;
+
                     do
                     {
-                        int u = v;
+						u = v;
                         if (2 * u + 1 <= numberOfOpenListItems)
                         {
                             if (Fcost[openList[u]] >= Fcost[openList[2 * u]])
@@ -214,15 +216,11 @@ namespace PG4500_2015_Innlevering2
                             openList[u] = openList[v];
                             openList[v] = temp;
                         }
-                        else
-                        {
-                            break;
-                        }
-                    } while (true);
-                    Out.Write("Stop Point 4\n");
-                    for (int b = parentYval - 1; b <= parentYval + 1; b++)
+					} while (u != v);
+
+					for (int b = parentYval - 1; b <= parentYval + 1; b++)
                     {
-                        for (int a = parentXval - 1; a <= parentXval + 1; b++)
+						for (int a = parentXval - 1; a <= parentXval + 1; b++)
                         {
                             Out.Write("Stop Point 5\n");
                             if (a != -1 && b != -1 && a != mapWidth && b != mapHeight)
@@ -267,7 +265,7 @@ namespace PG4500_2015_Innlevering2
                                         if (corner == walkable)
                                         {
                                             Out.Write("Stop Point 8\n");
-                                            int m;
+											int m;
                                             if (whichList[a, b] != onOpenList)
                                             {
                                                 newOpenListItemID += 1;
@@ -322,7 +320,7 @@ namespace PG4500_2015_Innlevering2
                                                 {
                                                     addedGCost = 10;
                                                 }
-                                                int tempGcost = Gcost[parentXval, parentYval] + addedGCost;
+												int tempGcost = Gcost[parentXval, parentYval] + addedGCost;
 
                                                 if (tempGcost < Gcost[a, b])
                                                 {
@@ -383,11 +381,11 @@ namespace PG4500_2015_Innlevering2
                 pathX = targetX;
                 pathY = targetY;
 
-                //This shit is all backwards...
+				//This shit is all backwards...
 
                 do
                 {
-                    int tempx = parentX[pathX, pathY];
+					int tempx = parentX[pathX, pathY];
                     pathY = parentY[pathX, pathY];
                     pathX = tempx;
 
@@ -398,14 +396,14 @@ namespace PG4500_2015_Innlevering2
                 pathY = targetY;
                 cellPosition = pathLength * 2;
 
-                //So is this...
+				//So is this...
 
                 do
                 {
                     pathBank.Enqueue(pathX);
                     pathBank.Enqueue(pathY);
 
-                    int tempx = parentX[pathX, pathY];
+					int tempx = parentX[pathX, pathY];
                     pathY = parentY[pathX, pathY];
                     pathX = tempx;
                 } while (pathX != startX || pathY != startY);
