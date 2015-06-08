@@ -59,7 +59,7 @@ namespace PG4500_2015_Innlevering2
 			//Startup - Go to (25, 25) and wait.
 			nodeX = 25;
 			nodeY = 25;
-			DebugProperty["Headed to"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
+			DebugProperty["Headed to coord"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
             DebugProperty["Headed to tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
 			GoToPoint(nodeX, nodeY);
 			WaitFor(new MoveCompleteCondition(this));
@@ -81,7 +81,7 @@ namespace PG4500_2015_Innlevering2
 					//Execute();
 					if (enemyStopped)
 					{
-						DebugProperty["Headed to"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
+						DebugProperty["Headed to coord"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
                         DebugProperty["Headed to tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
 						GoToPoint(nodeX, nodeY);
 					}
