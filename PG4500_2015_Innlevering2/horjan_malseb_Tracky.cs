@@ -134,8 +134,7 @@ namespace PG4500_2015_Innlevering2
 		public int FindPath(int startingX, int startingY, int targetX, int targetY)
 		{
 			int onOpenList = 0, parentXval = 0, parentYval = 0, temp = 0, corner = 0, numberOfOpenListItems = 0,
-	addedGCost = 0, tempGcost = 0, path = 0,
-	tempx, pathX, pathY, cellPosition,
+	addedGCost = 0, path = 0, pathX, pathY, cellPosition,
 	newOpenListItemID = 0;
 
 			int startX = startingX / tilesize;
@@ -309,7 +308,7 @@ namespace PG4500_2015_Innlevering2
 												{
 													addedGCost = 10;
 												}
-												tempGcost = Gcost[parentXval, parentYval] + addedGCost;
+												int tempGcost = Gcost[parentXval, parentYval] + addedGCost;
 
 												if (tempGcost < Gcost[a, b])
 												{
@@ -367,26 +366,29 @@ namespace PG4500_2015_Innlevering2
 				pathX = targetX;
 				pathY = targetY;
 
+				//This shit is all backwards...
+
 				do
 				{
-					tempx = parentX[pathX, pathY];
+					int tempx = parentX[pathX, pathY];
 					pathY = parentY[pathX, pathY];
 					pathX = tempx;
 
 					pathLength += 1;
 				} while (pathX != startX || pathY != startY);
 
-				//This shit is all backwards.. 
-
 				pathX = targetX;
 				pathY = targetY;
 				cellPosition = pathLength * 2;
+
+				//So is this...
+
 				do
 				{
 					pathBank.Enqueue(pathX);
 					pathBank.Enqueue(pathY);
 
-					tempx = parentX[pathX, pathY];
+					int tempx = parentX[pathX, pathY];
 					pathY = parentY[pathX, pathY];
 					pathX = tempx;
 				} while (pathX != startX || pathY != startY);
