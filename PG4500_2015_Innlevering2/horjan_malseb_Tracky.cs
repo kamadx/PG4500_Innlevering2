@@ -364,6 +364,10 @@ namespace PG4500_2015_Innlevering2
                                     }
                                 }
                             }
+							else
+							{
+								Out.Write("Raise hell! And zombies!");
+							}
                         }
                     }
                 }
