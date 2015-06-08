@@ -139,10 +139,8 @@ namespace PG4500_2015_Innlevering2
 
         public int FindPath(int startingX, int startingY, int targetX, int targetY)
         {
-            Out.Write("Starting FindPath()");
-            int onOpenList = 0, parentXval = 0, parentYval = 0, a = 0, b = 0, m = 0, u = 0, v = 0, temp = 0, corner = 0, numberOfOpenListItems = 0,
-    addedGCost = 0, tempGcost = 0, path = 0,
-    tempx, pathX, pathY, cellPosition,
+			int onOpenList = 0, parentXval = 0, parentYval = 0, temp = 0, corner = 0, numberOfOpenListItems = 0,
+	addedGCost = 0, path = 0, pathX, pathY, cellPosition,
     newOpenListItemID = 0;
 
             int startX = (startingX / tilesize) + 1;
@@ -159,15 +157,15 @@ namespace PG4500_2015_Innlevering2
                 for (int x = 0; x < mapWidth; x++)
                 {
                     for (int y = 0; y < mapHeight; y++)
-                        whichList[x,y] = 0;
+						whichList[x, y] = 0;
                 }
                 onClosedList = 10;
             }
-            onClosedList += + 2;
+			onClosedList += 2;
             onOpenList = onClosedList - 1;
             pathLength = 0;//i.e, = not started
             pathLocation = 0;//i.e, = not started
-            Gcost[startX,startY] = 0; //reset starting square's G value to 0
+			Gcost[startX, startY] = 0; //reset starting square's G value to 0
 
             //Add start location to the open list
             numberOfOpenListItems = 1;
@@ -185,11 +183,11 @@ namespace PG4500_2015_Innlevering2
                     numberOfOpenListItems -= 1;
 
                     openList[1] = openList[numberOfOpenListItems + 1];
-                    v = 1;
+					int v = 1;
 
                     do
                     {
-                        u = v;
+						int u = v;
                         if (2 * u + 1 <= numberOfOpenListItems)
                         {
                             if (Fcost[openList[u]] >= Fcost[openList[2 * u]])
@@ -223,9 +221,9 @@ namespace PG4500_2015_Innlevering2
                         }
                     } while (true);
 
-                    for (b = parentYval - 1; b <= parentYval + 1; b++)
+					for (int b = parentYval - 1; b <= parentYval + 1; b++)
                     {
-                        for (a = parentXval - 1; a <= parentXval + 1; b++)
+						for (int a = parentXval - 1; a <= parentXval + 1; b++)
                         {
                             if (a != -1 && b != -1 && a != mapWidth && b != mapHeight)
                             {
@@ -266,6 +264,7 @@ namespace PG4500_2015_Innlevering2
                                         }
                                         if (corner == walkable)
                                         {
+											int m;
                                             if (whichList[a, b] != onOpenList)
                                             {
                                                 newOpenListItemID += 1;
@@ -317,7 +316,7 @@ namespace PG4500_2015_Innlevering2
                                                 {
                                                     addedGCost = 10;
                                                 }
-                                                tempGcost = Gcost[parentXval, parentYval] + addedGCost;
+												int tempGcost = Gcost[parentXval, parentYval] + addedGCost;
 
                                                 if (tempGcost < Gcost[a, b])
                                                 {
@@ -375,26 +374,29 @@ namespace PG4500_2015_Innlevering2
                 pathX = targetX;
                 pathY = targetY;
 
+				//This shit is all backwards...
+
                 do
                 {
-                    tempx = parentX[pathX, pathY];
+					int tempx = parentX[pathX, pathY];
                     pathY = parentY[pathX, pathY];
                     pathX = tempx;
 
                     pathLength += 1;
                 } while (pathX != startX || pathY != startY);
 
-                //This shit is all backwards.. 
-
                 pathX = targetX;
                 pathY = targetY;
                 cellPosition = pathLength * 2;
+
+				//So is this...
+
                 do
                 {
                     pathBank.Enqueue(pathX);
                     pathBank.Enqueue(pathY);
 
-                    tempx = parentX[pathX, pathY];
+					int tempx = parentX[pathX, pathY];
                     pathY = parentY[pathX, pathY];
                     pathX = tempx;
                 } while (pathX != startX || pathY != startY);
