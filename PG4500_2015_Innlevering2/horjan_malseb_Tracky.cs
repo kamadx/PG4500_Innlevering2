@@ -46,6 +46,7 @@ namespace PG4500_2015_Innlevering2
 
 		//Point to go to.
 		public int nodeX, nodeY;
+        public int tilesize = 50;
 		public bool enemyStopped;
 
 		private RobotStatus robotStatus;
@@ -59,6 +60,7 @@ namespace PG4500_2015_Innlevering2
 			nodeX = 25;
 			nodeY = 25;
 			DebugProperty["Headed to"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
+            DebugProperty["Headed to tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
 			GoToPoint(nodeX, nodeY);
 			WaitFor(new MoveCompleteCondition(this));
 			Out.Write("#{0}\t{1}\n", Time, "Arrived at (" + X.ToString() + "," + Y.ToString() + ").");
@@ -80,6 +82,7 @@ namespace PG4500_2015_Innlevering2
 					if (enemyStopped)
 					{
 						DebugProperty["Headed to"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
+                        DebugProperty["Headed to tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
 						GoToPoint(nodeX, nodeY);
 					}
 
@@ -136,8 +139,8 @@ namespace PG4500_2015_Innlevering2
 
 
 			// Calculate the coordinates of the robot
-			nodeX = (robotStatus.X + Math.Sin(angle) * e.Distance);
-			nodeY = (robotStatus.Y + Math.Cos(angle) * e.Distance);
+			nodeX = (int)(robotStatus.X + Math.Sin(angle) * e.Distance);
+			nodeY = (int)(robotStatus.Y + Math.Cos(angle) * e.Distance);
 		}
 
 		public double ToRad(double angle)
