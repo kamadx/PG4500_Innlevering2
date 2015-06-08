@@ -53,7 +53,7 @@ namespace PG4500_2015_Innlevering2
 
 
         private int[] Fcost = new int[mapWidth * mapHeight + 1];
-        private int[,] Gcost = new int[mapWidth, mapHeight];
+        private int[,] Gcost = new int[mapWidth+1, mapHeight+1];
         private int[] Hcost = new int[mapWidth * mapHeight + 1];
         private int[] openList = new int[mapWidth * mapHeight + 1];
         private int[,] whichList = new int[mapWidth+1, mapHeight+1];
