@@ -48,6 +48,7 @@ namespace PG4500_2015_Innlevering2
         private const int tilesize = 50;
         private const int walkable = 0, unwalkable = 1;
         private const int mapWidth = 16, mapHeight = 12;
+        private const int found = 1, nonexistent = 2;
         private bool enemyStopped;
 
 
@@ -130,7 +131,7 @@ namespace PG4500_2015_Innlevering2
             Execute();
         }
 
-        public void FindPath(int startingX, int startingY, int targetX, int targetY)
+        public int FindPath(int startingX, int startingY, int targetX, int targetY)
         {
             int onOpenList = 0, parentXval = 0, parentYval = 0, a = 0, b = 0, m = 0, u = 0, v = 0, temp = 0, corner = 0, numberOfOpenListItems = 0,
     addedGCost = 0, tempGcost = 0, path = 0,
@@ -166,104 +167,181 @@ namespace PG4500_2015_Innlevering2
 
             do
             {
-                if (numberOfOpenListItems != 0) {
+                if (numberOfOpenListItems != 0)
+                {
                     parentXval = openX[openList[1]];
                     parentYval = openY[openList[1]];
-                    whichList[parentXval,parentYval] = onClosedList;
+                    whichList[parentXval, parentYval] = onClosedList;
 
-                    numberOfOpenListItems -= 1; 
+                    numberOfOpenListItems -= 1;
 
-                    openList[1] = openList[numberOfOpenListItems+1];
+                    openList[1] = openList[numberOfOpenListItems + 1];
                     v = 1;
 
-                    do {
+                    do
+                    {
                         u = v;
-                        if (2*u+1 <= numberOfOpenListItems) {
-                            if (Fcost[openList[u]] >= Fcost[openList[2*u]]) {
-                                v = 2*u;
+                        if (2 * u + 1 <= numberOfOpenListItems)
+                        {
+                            if (Fcost[openList[u]] >= Fcost[openList[2 * u]])
+                            {
+                                v = 2 * u;
                             }
-                            if (Fcost[openList[v]] >= Fcost[openList[2*u+1]]) {
-                                v = 2*u+1;
+                            if (Fcost[openList[v]] >= Fcost[openList[2 * u + 1]])
+                            {
+                                v = 2 * u + 1;
                             }
-                        } else {
-                            if (2*u <= numberOfOpenListItems){
-                                if (Fcost[openList[u]] >= Fcost[openList[2*u]]) {
-                                    v = 2*u;
+                        }
+                        else
+                        {
+                            if (2 * u <= numberOfOpenListItems)
+                            {
+                                if (Fcost[openList[u]] >= Fcost[openList[2 * u]])
+                                {
+                                    v = 2 * u;
                                 }
                             }
                         }
-                        if (u != v) {
+                        if (u != v)
+                        {
                             temp = openList[u];
                             openList[u] = openList[v];
                             openList[v] = temp;
-                        } else {
+                        }
+                        else
+                        {
                             break;
                         }
                     } while (true);
 
-                    for (b = parentYval-1; b <= parentYval+1; b++) {
-                        for (a = parentXval-1; a <= parentXval+1; b++) {
-                            if (a != -1 && b != -1 && a != mapWidth && b != mapHeight) {
-                                if (whichList[a,b] != onClosedList) {
-                                    if (collisionMap[a,b] != unwalkable) {
+                    for (b = parentYval - 1; b <= parentYval + 1; b++)
+                    {
+                        for (a = parentXval - 1; a <= parentXval + 1; b++)
+                        {
+                            if (a != -1 && b != -1 && a != mapWidth && b != mapHeight)
+                            {
+                                if (whichList[a, b] != onClosedList)
+                                {
+                                    if (collisionMap[a, b] != unwalkable)
+                                    {
                                         corner = walkable;
-                                        if (a == parentYval-1) {
-                                            if (b == parentYval-1) {
-                                                if (collisionMap[parentXval-1, parentYval] == unwalkable || collisionMap[parentXval, parentYval-1] == unwalkable) {
-                                                       corner = unwalkable;
-                                                }
-                                            } else if (b == parentYval+1) {
-                                                if (collisionMap[parentXval,parentYval+1] == unwalkable || collisionMap[parentXval-1,parentYval] == unwalkable) {
+                                        if (a == parentYval - 1)
+                                        {
+                                            if (b == parentYval - 1)
+                                            {
+                                                if (collisionMap[parentXval - 1, parentYval] == unwalkable || collisionMap[parentXval, parentYval - 1] == unwalkable)
+                                                {
                                                     corner = unwalkable;
                                                 }
                                             }
-                                        } else if (a == parentXval+1) {
-                                            if (b == parentYval-1)
-		                                    {
-			                                    if (collisionMap[parentXval,parentYval-1] == unwalkable || collisionMap[parentXval+1,parentYval] == unwalkable) 
-				                                    corner = unwalkable;
-		                                    }
-		                                    else if (b == parentYval+1)
-		                                    {
-			                                    if (collisionMap[parentXval+1,parentYval] == unwalkable || collisionMap[parentXval,parentYval+1] == unwalkable)
-				                                    corner = unwalkable; 
-		                                    }
+                                            else if (b == parentYval + 1)
+                                            {
+                                                if (collisionMap[parentXval, parentYval + 1] == unwalkable || collisionMap[parentXval - 1, parentYval] == unwalkable)
+                                                {
+                                                    corner = unwalkable;
+                                                }
+                                            }
                                         }
-                                        if (corner == walkable) {
-                                            if (whichList[a,b] != onOpenList){
+                                        else if (a == parentXval + 1)
+                                        {
+                                            if (b == parentYval - 1)
+                                            {
+                                                if (collisionMap[parentXval, parentYval - 1] == unwalkable || collisionMap[parentXval + 1, parentYval] == unwalkable)
+                                                    corner = unwalkable;
+                                            }
+                                            else if (b == parentYval + 1)
+                                            {
+                                                if (collisionMap[parentXval + 1, parentYval] == unwalkable || collisionMap[parentXval, parentYval + 1] == unwalkable)
+                                                    corner = unwalkable;
+                                            }
+                                        }
+                                        if (corner == walkable)
+                                        {
+                                            if (whichList[a, b] != onOpenList)
+                                            {
                                                 newOpenListItemID += 1;
                                                 m = numberOfOpenListItems + 1;
                                                 openList[m] = newOpenListItemID;
                                                 openX[newOpenListItemID] = a;
                                                 openY[newOpenListItemID] = b;
 
-                                                if (Math.Abs(a-parentXval) == 1 && Math.Abs(b-parentYval) == 1){
+                                                if (Math.Abs(a - parentXval) == 1 && Math.Abs(b - parentYval) == 1)
+                                                {
                                                     addedGCost = 14;
-                                                } else {
+                                                }
+                                                else
+                                                {
                                                     addedGCost = 10;
                                                 }
-                                                Gcost[a,b] = Gcost[parentXval, parentYval] + addedGCost;
+                                                Gcost[a, b] = Gcost[parentXval, parentYval] + addedGCost;
 
-                                                Hcost[openList[m]] = 10*(Math.Abs(a - targetX) + Math.Abs(b - targetY));
-                                                Fcost[openList[m]] = Gcost[a,b] + Hcost[openList[m]];
-                                                parentX[a,b] = parentXval;
-                                                parentY[a,b] = parentYval;
+                                                Hcost[openList[m]] = 10 * (Math.Abs(a - targetX) + Math.Abs(b - targetY));
+                                                Fcost[openList[m]] = Gcost[a, b] + Hcost[openList[m]];
+                                                parentX[a, b] = parentXval;
+                                                parentY[a, b] = parentYval;
 
-                                                while (m != 1) {
-                                                    if (Fcost[openList[m]] <= Fcost[openList[m/2]]) {
-                                                        temp = openList[m/2];
-                                                        openList[m/2] = openList[m];
+                                                while (m != 1)
+                                                {
+                                                    if (Fcost[openList[m]] <= Fcost[openList[m / 2]])
+                                                    {
+                                                        temp = openList[m / 2];
+                                                        openList[m / 2] = openList[m];
                                                         openList[m] = temp;
                                                         m /= 2;
-                                                    } else {
+                                                    }
+                                                    else
+                                                    {
                                                         break;
                                                     }
                                                 }
                                                 numberOfOpenListItems += 1;
 
-                                                whichList[a,b] = onOpenList;
-                                            } 
+                                                whichList[a, b] = onOpenList;
+                                            }
+                                            else
+                                            {
+                                                if (Math.Abs(a - parentXval) == 1 && Math.Abs(b - parentYval) == 1)
+                                                {
+                                                    addedGCost = 14;
+                                                }
+                                                else
+                                                {
+                                                    addedGCost = 10;
+                                                }
+                                                tempGcost = Gcost[parentXval, parentYval] + addedGCost;
 
+                                                if (tempGcost < Gcost[a, b])
+                                                {
+                                                    parentX[a, b] = parentXval;
+                                                    parentY[a, b] = parentYval;
+                                                    Gcost[a, b] = tempGcost;
+
+                                                    for (int x = 1; x <= numberOfOpenListItems; x++)
+                                                    {
+                                                        if (openX[openList[x]] == a && openY[openList[x]] == b)
+                                                        {
+                                                            Fcost[openList[x]] = Gcost[a, b] + Hcost[openList[x]];
+
+                                                            m = x;
+                                                            while (m != 1)
+                                                            {
+                                                                if (Fcost[openList[m]] < Fcost[openList[m / 2]])
+                                                                {
+                                                                    temp = openList[m / 2];
+                                                                    openList[m / 2] = openList[m];
+                                                                    openList[m] = temp;
+                                                                    m /= 2;
+                                                                }
+                                                                else
+                                                                {
+                                                                    break;
+                                                                }
+                                                            }
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -271,8 +349,51 @@ namespace PG4500_2015_Innlevering2
                         }
                     }
                 }
+                else
+                {
+                    path = nonexistent;
+                    break;
+                }
+                if (whichList[targetX, targetY] == onOpenList)
+                {
+                    path = found;
+                    break;
+                }
+            } while (true);
+
+            if (path == found)
+            {
+                pathX = targetX;
+                pathY = targetY;
+
+                do
+                {
+                    tempx = parentX[pathX, pathY];
+                    pathY = parentY[pathX, pathY];
+                    pathX = tempx;
+
+                    pathLength += 1;
+                } while (pathX != startX || pathY != startY);
+
+                //This shit is all backwards.. 
+
+                pathX = targetX;
+                pathY = targetY;
+                cellPosition = pathLength * 2;
+                do
+                {
+                    pathBank.Enqueue(pathX);
+                    pathBank.Enqueue(pathY);
+
+                    tempx = parentX[pathX, pathY];
+                    pathY = parentY[pathX, pathY];
+                    pathX = tempx;
+                } while (pathX != startX || pathY != startY);
+
+                ReadPath(startingX, startingY);
             }
-            }
+            return path;
+        }
 
         public void ReadPath(int currentX, int currentY)
         {
@@ -281,12 +402,12 @@ namespace PG4500_2015_Innlevering2
 
         public int ReadPathX(int pathLocation)
         {
-
+            return 0;
         }
 
         public int ReadPathY(int pathLocation)
         {
-
+            return 0;
         }
 
         public override void OnStatus(StatusEvent e)
