@@ -31,5 +31,10 @@ namespace PG4500_2015_Innlevering2
 		{
 			return new Node(i == 0, i);
 		}
+
+		public static implicit operator int(Node n)
+		{
+			return n.Cost;
+		}
 	}
 }
