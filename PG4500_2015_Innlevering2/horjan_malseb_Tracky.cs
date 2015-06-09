@@ -42,10 +42,10 @@ namespace PG4500_2015_Innlevering2
 
 
         //new
-        private int[,] checkedNodes = new int[mapWidth, mapHeight];
+        private int[,] checkedNodes = new int[mapHeight, mapWidth];
         //private int[,] uncheckedNodes = new int[mapWidth, mapHeight];
         private Queue<int> queuedNodes = new Queue<int>();
-        private int[,] visitedNodes = new int[mapWidth, mapHeight];
+        private int[,] visitedNodes = new int[mapHeight, mapWidth];
         private bool visited = false;
         private int gScore, fScore; //Turn to arrays
         
@@ -407,24 +407,29 @@ namespace PG4500_2015_Innlevering2
 
         public bool FindPath(int startX, int startY, int targetX, int targetY)
         {
-            //Set every Node that's not visited or empty to 0. Basically a clone of the collision map 
+            int i = 0, n = 0;
+            //Set every Node to not visited, i.e 0.
             for (int j = 0; j < checkedNodes.GetLength(0); j++)
             {
                 for (int k = 0; k < checkedNodes.GetLength(1); k++)
                 {
                     checkedNodes[j, k] = 0;
-                   
+                    Out.WriteLine("J:" + (j+1) + " K:" + (k+1));
+                    
                 }
             }
-          
+           
             //DEBUG
             targetX /= tilesize;
             targetY /= tilesize;
             startX /= tilesize;
             startY /= tilesize;
 
-            checkedNodes[startX, startY] = 1;
-            checkedNodes[targetX, targetY] = 1;
+            Out.WriteLine("Start:[" + (startX+1) +"," + (startY+1) + "]");
+            Out.WriteLine("Target:[" + (targetX+1) + "," + (targetY+1) + "]");
+
+            checkedNodes[startY, startX] = 1;
+            checkedNodes[targetY, targetX] = 1;
 
             for (int j = 0; j < checkedNodes.GetLength(0); j++)
             {
