@@ -25,7 +25,7 @@ namespace PG4500_2015_Innlevering2
          * W00t
          */
 
-
+		/*
         private readonly int[,] collisionMap = { //[y,x]
 		{0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0},
@@ -39,8 +39,9 @@ namespace PG4500_2015_Innlevering2
 		{0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+		 * */
 
-		private readonly Node[,] _collisionMap = { //[map height,map width]
+		private readonly Node[,] collisionMap = { //[map height,map width]
 		{0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0},
 		{1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0},
