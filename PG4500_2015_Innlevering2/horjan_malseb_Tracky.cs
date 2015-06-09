@@ -57,10 +57,10 @@ namespace PG4500_2015_Innlevering2
 
 
 		//new
-		private Node[,] checkedNodes = new Node[mapHeight, mapWidth];
+		//private Node[,] checkedNodes = new Node[mapHeight, mapWidth];
 		//private int[,] uncheckedNodes = new int[mapWidth, mapHeight];
 		private Queue<int> queuedNodes = new Queue<int>();
-		private Node[,] visitedNodes = new Node[mapHeight, mapWidth];
+		
 		private bool visited = false;
 		private int gScore, fScore; //Turn to arrays
 
@@ -468,16 +468,15 @@ namespace PG4500_2015_Innlevering2
 			startY /= tilesize;
 
 			//Does this even work?
-			Node currentNode = new Node();
+			Node currentNode;
 			Node startNode = collisionMap[startY, startX];
 			Node targetNode = collisionMap[targetY, targetX];
 
 			Out.WriteLine("Start:[" + (startX + 1) + "," + (startY + 1) + "]");
 			Out.WriteLine("Target:[" + (targetX + 1) + "," + (targetY + 1) + "]");
 
-			checkedNodes[startY, startX].Visited = true;
-			checkedNodes[targetY, targetX] = 1; // <- what is this. Is it visited? Currently being set to being a wall.
-
+			
+            collisionMap[startY, startX].Visited = true;
 
 
 			queuedNodes.Enqueue(startNode);
@@ -488,9 +487,9 @@ namespace PG4500_2015_Innlevering2
 			{
 				//since we're queueing the coords, we need them.
 				int currentY = queuedNodes.Dequeue();
-				int CurrentX = queuedNodes.Dequeue();
+				int currentX = queuedNodes.Dequeue();
 
-				currentNode = bottomLeft[currentY,CurrentX]; 
+				currentNode = bottomLeft[currentY,currentX]; 
 				if (currentNode == targetNode)
 				{
 					//We arrived!
@@ -498,7 +497,7 @@ namespace PG4500_2015_Innlevering2
 				}
 
 				//Set current node as a visited node.
-				currentNode.Visited = true;
+                collisionMap[currentY, currentX].Visited = true;
 
 				//find neighboring nodes
 				List<Node> neighbors = new List<Node>();
