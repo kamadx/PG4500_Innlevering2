@@ -59,7 +59,7 @@ namespace PG4500_2015_Innlevering2
         //new
         private Node[,] checkedNodes = new Node[mapHeight, mapWidth];
         //private int[,] uncheckedNodes = new int[mapWidth, mapHeight];
-        private Queue<Node> queuedNodes = new Queue<Node>();
+        private Queue<int> queuedNodes = new Queue<int>();
         private Node[,] visitedNodes = new Node[mapHeight, mapWidth];
         private bool visited = false;
         private int gScore, fScore; //Turn to arrays
@@ -447,7 +447,15 @@ namespace PG4500_2015_Innlevering2
 
             //////////////////////////////////////////////////////////////////////////////////////
             //Set every Node to not visited, i.e 0.
-            
+
+			Node[,] bottomLeft = (Node[,]) collisionMap.Clone();
+			for (int y = collisionMap.GetLength(0); y >= 0; y--)
+			{
+				for (int x = 0; x <= collisionMap.GetLength(1); y++)
+				{
+					bottomLeft[y, x] = collisionMap[y, x];
+				}
+			}
 
             foreach (Node n in collisionMap)
             {
