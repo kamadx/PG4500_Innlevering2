@@ -57,10 +57,10 @@ namespace PG4500_2015_Innlevering2
 
 
 		//new
-		private Node[,] checkedNodes = new Node[mapHeight, mapWidth];
+		//private Node[,] checkedNodes = new Node[mapHeight, mapWidth];
 		//private int[,] uncheckedNodes = new int[mapWidth, mapHeight];
 		private Queue<int> queuedNodes = new Queue<int>();
-		private Node[,] visitedNodes = new Node[mapHeight, mapWidth];
+		
 		private bool visited = false;
 		private int gScore, fScore; //Turn to arrays
 
@@ -473,9 +473,8 @@ namespace PG4500_2015_Innlevering2
 			Out.WriteLine("Start:[" + (startX + 1) + "," + (startY + 1) + "]");
 			Out.WriteLine("Target:[" + (targetX + 1) + "," + (targetY + 1) + "]");
 
-			checkedNodes[startY, startX].Visited = true;
-			checkedNodes[targetY, targetX] = 1; // <- what is this. Is it visited? Currently being set to being a wall.
 
+            collisionMap[startY, startX].Visited = true;
 
 			//this ain't right!
 			//queuedNodes.Enqueue(startNode);
