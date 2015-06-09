@@ -488,9 +488,9 @@ namespace PG4500_2015_Innlevering2
 			{
 				//since we're queueing the coords, we need them.
 				int currentY = queuedNodes.Dequeue();
-				int CurrentX = queuedNodes.Dequeue();
+				int currentX = queuedNodes.Dequeue();
 
-				currentNode = bottomLeft[currentY,CurrentX]; 
+				currentNode = bottomLeft[currentY, currentX];
 				if (currentNode == targetNode)
 				{
 					//We arrived!
@@ -501,7 +501,62 @@ namespace PG4500_2015_Innlevering2
 				currentNode.Visited = true;
 
 				//find neighboring nodes
-				List<Node> neighbors = new List<Node>();
+				#region check neighbours
+				List<int> neighbours = new List<int>();
+				if (currentX > 0)
+				{
+					neighbours.Add(currentY);
+					neighbours.Add(currentX - 1);
+
+					if (currentY < bottomLeft.GetLength(0))
+					{
+						neighbours.Add(currentY + 1);
+						neighbours.Add(currentX - 1);
+					}
+					if (currentY > 0)
+					{
+						neighbours.Add(currentY - 1);
+						neighbours.Add(currentX - 1);
+					}
+				}
+				if (currentX < bottomLeft.GetLength(1))
+				{
+					neighbours.Add(currentY);
+					neighbours.Add(currentX + 1);
+
+					if (currentY > 0)
+					{
+						neighbours.Add(currentY - 1);
+						neighbours.Add(currentX + 1);
+					}
+					if (currentY < bottomLeft.GetLength(0))
+					{
+						neighbours.Add(currentY + 1);
+						neighbours.Add(currentX + 1);
+					}
+				}
+				if (currentY < bottomLeft.GetLength(0))
+				{
+					neighbours.Add(currentY + 1);
+					neighbours.Add(currentX);
+				}
+				if (currentY > 0)
+				{
+					neighbours.Add(currentY - 1);
+					neighbours.Add(currentX);
+				}
+
+				//remove all visited nodes.
+				for (int i = 0; i < neighbours.Count; i += 2)
+				{
+					if (bottomLeft[i, i + 1].Visited)
+					{
+						neighbours.RemoveAt(i);
+						neighbours.RemoveAt(i);
+						i -= 2;
+					}
+				}
+				#endregion
 
 				//calculate distance by A* method (Kamad, you know this better)
 
