@@ -562,6 +562,12 @@ namespace PG4500_2015_Innlevering2
 						neighbours.RemoveAt(i);
 						i -= 2;
 					}
+					if (!bottomLeft[i, i + 1].Walkable)
+					{
+						neighbours.RemoveAt(i);
+						neighbours.RemoveAt(i);
+						i -= 2;
+					}
 				}
 				#endregion
 
