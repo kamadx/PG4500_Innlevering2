@@ -26,7 +26,7 @@ namespace PG4500_2015_Innlevering2
          */
 
 
-        private const int[,] collisionMap = {
+        private readonly int[,] collisionMap = { //[y,x]
 		{0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0},
 		{1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0},
