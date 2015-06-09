@@ -442,6 +442,23 @@ namespace PG4500_2015_Innlevering2
                 return failure
              */
             #endregion PSEUDO
+            #region PG4400 Pseudo
+        //Pseudo-kode for A*:
+        //o Oppstart: MARK noder ”NOT visited”, etc.
+        //o Initialiser målnode, startnode, m.m.
+        //o ADD startnode til køen (traveled = 0.0).
+        //o MARK startnode ”visited”.
+        //o WHILE (queued list ikke tom)
+        //o SET current = første fra køen, DELETE.
+        //o IF (current == mål)
+        //o TERMINATE with SUCCESS.
+        //o ADD current til visitedList.
+        //o FOR (hver node tilkoplet current ("neighbour"))
+        //o Do the A* distance comparisons,
+        //add (sorted by distance) if not seen before
+        //or if shorter path.
+        //o TERMINATE with FAILURE.
+            #endregion
             return false;
         }
         
