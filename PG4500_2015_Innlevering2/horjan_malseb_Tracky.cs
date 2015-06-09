@@ -421,19 +421,35 @@ namespace PG4500_2015_Innlevering2
 
         public bool FindPath(int startX, int startY, int targetX, int targetY)
         {
-            int i = 0, n = 0;
-            //Set every Node to not visited, i.e 0.
-            for (int j = 0; j < checkedNodes.GetLength(0); j++)
+            
+           
+            /*for (int j = 0; j < checkedNodes.GetLength(0); j++)
             {
-                for (int k = 0; k < checkedNodes.GetLength(1); k++)
-                {
-                    checkedNodes[j, k] = 0;
+               for (int k = 0; k < checkedNodes.GetLength(1); k++)
+               {
+                   checkedNodes[j, k] = 0;
                     Out.WriteLine("J:" + (j+1) + " K:" + (k+1));
                     
                 }
+            }*/
+           /*for (int x = 0; x < checkedNodes.GetLength(1); x++)
+            {
+                Out.Write("[");
+                for (int y = 0; y < checkedNodes.GetLength(0); y++)
+                {
+                    Out.Write(checkedNodes[x, y] + ",");
+                }
+                Out.WriteLine("]");
             }
-           
-            //DEBUG
+            //uʍop ǝpısdn pǝddıןɟ sı ʇıɥs sıɥʇ
+            */
+
+            //////////////////////////////////////////////////////////////////////////////////////
+            //Set every Node to not visited, i.e 0.
+            foreach (Node n in _collisionMap)
+            {
+                n.Visited = false;
+            }
             targetX /= tilesize;
             targetY /= tilesize;
             startX /= tilesize;
@@ -445,22 +461,11 @@ namespace PG4500_2015_Innlevering2
             checkedNodes[startY, startX] = 1;
             checkedNodes[targetY, targetX] = 1;
 
-            for (int x = 0; x < checkedNodes.GetLength(1); x++)
-            {
-                Out.Write("[");
-                for (int y = 0; y < checkedNodes.GetLength(0); y++)
-                {
-                    Out.Write(checkedNodes[x, y] + ",");
-                }
-                Out.WriteLine("]");
-            }
-            //uʍop ǝpısdn pǝddıןɟ sı ʇıɥs sıɥʇ
-
-
             queuedNodes.Enqueue(startX);
             queuedNodes.Enqueue(startY);
 
-            
+            collisionMap[startY, startX];
+            ///////////////////////////////////////////////////////////////////////////////////////////
             #region PSEUDO
             /*
              function A*(start,goal)
