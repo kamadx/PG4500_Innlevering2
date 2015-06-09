@@ -435,8 +435,13 @@ namespace PG4500_2015_Innlevering2
                 }
                 Out.WriteLine("]");
             }
-            //^Shit is flipped 90deg
+            //uʍop ǝpısdn pǝddıןɟ sı ʇıɥs sıɥʇ
 
+
+            queuedNodes.Enqueue(startX);
+            queuedNodes.Enqueue(startY);
+
+            
             #region PSEUDO
             /*
              function A*(start,goal)
