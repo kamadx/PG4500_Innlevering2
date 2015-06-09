@@ -18,7 +18,7 @@ namespace PG4500_2015_Innlevering2
 		public int Sector { get { return _sector; } set { _sector = value; } }
 		public bool Visited { get { return _visited; } set { _visited = value; } }
 
-		public Node(bool walkable = false, int cost = 0, int sector = 0, bool visited = false)
+		public Node(bool walkable = false, int cost = 0, bool visited = false, int sector = 0)
 		{
 			Walkable = walkable;
 			Cost = cost;
