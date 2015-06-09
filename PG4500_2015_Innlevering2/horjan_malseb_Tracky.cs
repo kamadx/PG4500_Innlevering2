@@ -486,7 +486,11 @@ namespace PG4500_2015_Innlevering2
 
 			while (queuedNodes.Count > 0)
 			{
-				currentNode = queuedNodes.Dequeue();
+				//since we're queueing the coords, we need them.
+				int currentY = queuedNodes.Dequeue();
+				int CurrentX = queuedNodes.Dequeue();
+
+				currentNode = bottomLeft[currentY,CurrentX]; 
 				if (currentNode == targetNode)
 				{
 					//We arrived!
@@ -497,6 +501,7 @@ namespace PG4500_2015_Innlevering2
 				currentNode.Visited = true;
 
 				//find neighboring nodes
+				List<Node> neighbors = new List<Node>();
 
 				//calculate distance by A* method (Kamad, you know this better)
 
