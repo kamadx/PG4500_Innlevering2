@@ -426,12 +426,12 @@ namespace PG4500_2015_Innlevering2
             checkedNodes[startX, startY] = 1;
             checkedNodes[targetX, targetY] = 1;
 
-            for (int j = 0; j < checkedNodes.GetLength(0); j++)
+            for (int x = 0; x < checkedNodes.GetLength(1); x++)
             {
                 Out.Write("[");
-                for (int k = 0; k < checkedNodes.GetLength(1); k++)
+                for (int y = 0; y < checkedNodes.GetLength(0); y++)
                 {
-                    Out.Write(checkedNodes[j, k] + ",");
+                    Out.Write(checkedNodes[x, y] + ",");
                 }
                 Out.WriteLine("]");
             }
