@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace PG4500_2015_Innlevering2
 {
-	//preliminarily works exactly like a bool.
 	class Node
 	{
 		private bool _walkable;
@@ -23,14 +22,14 @@ namespace PG4500_2015_Innlevering2
 			Sector = sector;
 		}
 
-		public static implicit operator Node(bool b)
-		{
-			return new Node(b);
-		}
-
 		public static implicit operator bool(Node n)
 		{
 			return n.Walkable;
+		}
+
+		public static implicit operator Node(int i)
+		{
+			return new Node(i == 0, i);
 		}
 	}
 }
