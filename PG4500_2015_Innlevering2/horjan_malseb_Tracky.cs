@@ -26,7 +26,7 @@ namespace PG4500_2015_Innlevering2
          */
 
 
-        private const int[,] collisionMap = {
+        private readonly int[,] collisionMap = {
 		{0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0},
 		{1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0},
@@ -116,7 +116,7 @@ namespace PG4500_2015_Innlevering2
                         DebugProperty["Headed to coord"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
                        // DebugProperty["Headed to tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
                         Out.WriteLine("Starting FindPath()");
-                        
+                        FindPath((int)(X), (int)(Y), nodeX, nodeY);
                         // GoToPoint(nodeX, nodeY);
                     }
 
@@ -408,10 +408,37 @@ namespace PG4500_2015_Innlevering2
         public bool FindPath(int startX, int startY, int targetX, int targetY)
         {
             //Set every Node that's not visited or empty to 0. Basically a clone of the collision map 
-          
+            for (int j = 0; j < checkedNodes.GetLength(0); j++)
+            {
+                for (int k = 0; k < checkedNodes.GetLength(1); k++)
+                {
+                    checkedNodes[j, k] = 0;
+                   
+                }
+            }
 
-            #region PSEUDO
-            /*
+            //DEBUG
+            targetX /= tilesize;
+            targetY /= tilesize;
+            startX /= tilesize;
+            startY /= tilesize;
+
+            checkedNodes[startX, startY] = 1;
+            checkedNodes[targetX, targetY] = 1;
+
+            for (int j = 0; j < checkedNodes.GetLength(0); j++)
+            {
+                Out.Write("[");
+                for (int k = 0; k < checkedNodes.GetLength(1); k++)
+                {
+                    Out.Write(checkedNodes[j, k] + ",");
+                }
+                Out.WriteLine("]");
+            }
+            //^Shit is flipped 90deg
+
+                #region PSEUDO
+                /*
              function A*(start,goal)
                 closedset := the empty set    // The set of nodes already evaluated.
                 openset := {start}    // The set of tentative nodes to be evaluated, initially containing the start node
@@ -441,25 +468,25 @@ namespace PG4500_2015_Innlevering2
                                 add neighbor to openset
                 return failure
              */
-            #endregion PSEUDO
-            #region PG4400 Pseudo
-        //Pseudo-kode for A*:
-        //o Oppstart: MARK noder ”NOT visited”, etc.
-        //o Initialiser målnode, startnode, m.m.
-        //o ADD startnode til køen (traveled = 0.0).
-        //o MARK startnode ”visited”.
-        //o WHILE (queued list ikke tom)
-        //o SET current = første fra køen, DELETE.
-        //o IF (current == mål)
-        //o TERMINATE with SUCCESS.
-        //o ADD current til visitedList.
-        //o FOR (hver node tilkoplet current ("neighbour"))
-        //o Do the A* distance comparisons,
-        //add (sorted by distance) if not seen before
-        //or if shorter path.
-        //o TERMINATE with FAILURE.
-            #endregion
-            return false;
+                #endregion PSEUDO
+                #region PG4400 Pseudo
+                //Pseudo-kode for A*:
+                //o Oppstart: MARK noder ”NOT visited”, etc.
+                //o Initialiser målnode, startnode, m.m.
+                //o ADD startnode til køen (traveled = 0.0).
+                //o MARK startnode ”visited”.
+                //o WHILE (queued list ikke tom)
+                //o SET current = første fra køen, DELETE.
+                //o IF (current == mål)
+                //o TERMINATE with SUCCESS.
+                //o ADD current til visitedList.
+                //o FOR (hver node tilkoplet current ("neighbour"))
+                //o Do the A* distance comparisons,
+                //add (sorted by distance) if not seen before
+                //or if shorter path.
+                //o TERMINATE with FAILURE.
+                #endregion
+                return false;
         }
         
         public void ReadPath(int currentX, int currentY)
