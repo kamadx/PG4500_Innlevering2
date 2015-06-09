@@ -467,8 +467,6 @@ namespace PG4500_2015_Innlevering2
 			startX /= tilesize;
 			startY /= tilesize;
 
-			//Does this even work?
-			Node currentNode = new Node();
 			Node startNode = collisionMap[startY, startX];
 			Node targetNode = collisionMap[targetY, targetX];
 
@@ -479,8 +477,12 @@ namespace PG4500_2015_Innlevering2
 			checkedNodes[targetY, targetX] = 1; // <- what is this. Is it visited? Currently being set to being a wall.
 
 
+			//this ain't right!
+			//queuedNodes.Enqueue(startNode);
 
-			queuedNodes.Enqueue(startNode);
+			//this is.
+			queuedNodes.Enqueue(startY);
+			queuedNodes.Enqueue(startX);
 
 			collisionMap[startY, startX].Visited = true;
 
@@ -490,7 +492,7 @@ namespace PG4500_2015_Innlevering2
 				int currentY = queuedNodes.Dequeue();
 				int currentX = queuedNodes.Dequeue();
 
-				currentNode = bottomLeft[currentY, currentX];
+				Node currentNode = bottomLeft[currentY, currentX];
 				if (currentNode == targetNode)
 				{
 					//We arrived!
@@ -503,6 +505,7 @@ namespace PG4500_2015_Innlevering2
 				//find neighboring nodes
 				#region check neighbours
 				List<int> neighbours = new List<int>();
+
 				if (currentX > 0)
 				{
 					neighbours.Add(currentY);
@@ -513,12 +516,14 @@ namespace PG4500_2015_Innlevering2
 						neighbours.Add(currentY + 1);
 						neighbours.Add(currentX - 1);
 					}
+
 					if (currentY > 0)
 					{
 						neighbours.Add(currentY - 1);
 						neighbours.Add(currentX - 1);
 					}
 				}
+
 				if (currentX < bottomLeft.GetLength(1))
 				{
 					neighbours.Add(currentY);
@@ -529,17 +534,20 @@ namespace PG4500_2015_Innlevering2
 						neighbours.Add(currentY - 1);
 						neighbours.Add(currentX + 1);
 					}
+
 					if (currentY < bottomLeft.GetLength(0))
 					{
 						neighbours.Add(currentY + 1);
 						neighbours.Add(currentX + 1);
 					}
 				}
+
 				if (currentY < bottomLeft.GetLength(0))
 				{
 					neighbours.Add(currentY + 1);
 					neighbours.Add(currentX);
 				}
+
 				if (currentY > 0)
 				{
 					neighbours.Add(currentY - 1);
@@ -561,7 +569,7 @@ namespace PG4500_2015_Innlevering2
 				//calculate distance by A* method (Kamad, you know this better)
 
 			}
-			///////////////////////////////////////////////////////////////////////////////////////////
+			return false;
 			#region PSEUDO
 			/*
              function A*(start,goal)
@@ -611,7 +619,6 @@ namespace PG4500_2015_Innlevering2
 			//or if shorter path.
 			//o TERMINATE with FAILURE.
 			#endregion
-			return false;
 		}
 
 		public void ReadPath(int currentX, int currentY)
