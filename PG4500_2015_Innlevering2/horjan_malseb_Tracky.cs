@@ -459,8 +459,10 @@ namespace PG4500_2015_Innlevering2
             startX /= tilesize;
             startY /= tilesize;
 
-            //Node[,] currentNode;
-            //Node[,] targetNode;
+            //Does this even work?
+            Node currentNode = new Node();
+            Node startNode = collisionMap[startY, startX];
+            Node targetNode = collisionMap[targetY, targetX];
 
             Out.WriteLine("Start:[" + (startX+1) +"," + (startY+1) + "]");
             Out.WriteLine("Target:[" + (targetX+1) + "," + (targetY+1) + "]");
@@ -468,18 +470,23 @@ namespace PG4500_2015_Innlevering2
             checkedNodes[startY, startX].Visited = true;
             checkedNodes[targetY, targetX] = 1; // <- what is this. Is it visited? Currently being set to being a wall.
 
-            queuedNodes.Enqueue(startX);
-            queuedNodes.Enqueue(startY);
+            
+
+            queuedNodes.Enqueue(startNode);
 
 			collisionMap[startY, startX].Visited = true;
 
             while (queuedNodes.Count != 0)
             {
-                //currentNode[] = queuedNodes.Dequeue()
-                //if (currentNode == targetNode) {
-                //  return SUCCESS
-                //}
-                //Rest of psuedo
+                currentNode = queuedNodes.Dequeue();
+                if (currentNode == targetNode)
+                {
+                    //We arrived!
+                    return true;
+                }
+
+                //Set current node as a visited node.
+               
             }
             ///////////////////////////////////////////////////////////////////////////////////////////
             #region PSEUDO
