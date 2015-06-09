@@ -408,11 +408,11 @@ namespace PG4500_2015_Innlevering2
         public bool FindPath(int startX, int startY, int targetX, int targetY)
         {
             //Set every Node that's not visited or empty to 0. Basically a clone of the collision map 
-            for (int y = 0; y < checkedNodes.GetLength(0); y++)
+            for (int j = 0; j < checkedNodes.GetLength(0); j++)
             {
-                for (int x = 0; x < checkedNodes.GetLength(1); x++)
+                for (int k = 0; k < checkedNodes.GetLength(1); k++)
                 {
-                    checkedNodes[y, x] = 0;
+                    checkedNodes[j, k] = 0;
                    
                 }
             }
@@ -423,23 +423,23 @@ namespace PG4500_2015_Innlevering2
             startX /= tilesize;
             startY /= tilesize;
 
-            checkedNodes[startY, startX] = 1;
-            checkedNodes[targetY, targetX] = 1;
+            checkedNodes[startX, startY] = 1;
+            checkedNodes[targetX, targetY] = 1;
 
-            for (int y = 0; y < checkedNodes.GetLength(0); y++)
+            for (int j = 0; j < checkedNodes.GetLength(0); j++)
             {
                 Out.Write("[");
-                for (int x = 0; x < checkedNodes.GetLength(1); x++)
+                for (int k = 0; k < checkedNodes.GetLength(1); k++)
                 {
-                    Out.Write(checkedNodes[y, x] + ",");
+                    Out.Write(checkedNodes[j, k] + ",");
                 }
                 Out.WriteLine("]");
             }
-
-
             //uʍop ǝpısdn pǝddıןɟ sı ʇıɥs sıɥʇ
-            queuedNodes.Enqueue(startY);
+
+
             queuedNodes.Enqueue(startX);
+            queuedNodes.Enqueue(startY);
 
             
             #region PSEUDO
