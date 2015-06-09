@@ -62,7 +62,7 @@ namespace PG4500_2015_Innlevering2
 		private Queue<int> queuedNodes = new Queue<int>();
 		
 		private bool visited = false;
-		private int gScore, fScore; //Turn to arrays
+		private int gScore, fScore;
 
 
 		//Path Queue for reading path
@@ -456,6 +456,8 @@ namespace PG4500_2015_Innlevering2
 					bottomLeft[y, x] = collisionMap[y, x];
 				}
 			}
+            gScore = 0;
+            fScore = 0;
 
 			foreach (Node n in collisionMap)
 			{
@@ -557,7 +559,15 @@ namespace PG4500_2015_Innlevering2
 				}
 				#endregion
 
-				//calculate distance by A* method (Kamad, you know this better)
+                #region Distance
+                //H Cost - Diagonal Distance
+                int dMax = Math.Max(Math.Abs(currentX - targetX), Math.Abs(currentY - targetY));
+                int dMin = Math.Min(Math.Abs(currentX - targetX), Math.Abs(currentY - targetY));
+                int nonDiagCost = 1;
+                double diagCost = 1.414;
+                double hScore = diagCost * dMin + nonDiagCost*(dMax - dMin);
+
+                //calculate distance by A* method (Kamad, you know this better)
 
 			}
 			///////////////////////////////////////////////////////////////////////////////////////////
