@@ -476,7 +476,7 @@ namespace PG4500_2015_Innlevering2
 			Out.WriteLine("Target:[" + (targetX + 1) + "," + (targetY + 1) + "]");
 
 
-            collisionMap[startY, startX].Visited = true;
+            startNode.Visited = true;
 
 			//this ain't right!
 			//queuedNodes.Enqueue(startNode);
@@ -485,7 +485,7 @@ namespace PG4500_2015_Innlevering2
 			queuedNodes.Enqueue(startY);
 			queuedNodes.Enqueue(startX);
 
-			collisionMap[startY, startX].Visited = true;
+			//collisionMap[startY, startX].Visited = true;
 
 			while (queuedNodes.Count > 0)
 			{
@@ -581,8 +581,8 @@ namespace PG4500_2015_Innlevering2
                 double diagCost = 1.414;
                 double hScore = diagCost * dMin + nonDiagCost*(dMax - dMin);
 
-                //calculate distance by A* method (Kamad, you know this better)
-
+				//calculate distance by A* method (Kamad, you know this better)
+				#endregion
 			}
 			return false;
 			#region PSEUDO
