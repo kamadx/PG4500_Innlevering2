@@ -447,14 +447,20 @@ namespace PG4500_2015_Innlevering2
 
             //////////////////////////////////////////////////////////////////////////////////////
             //Set every Node to not visited, i.e 0.
+            
+
             foreach (Node n in collisionMap)
             {
                 n.Visited = false;
             }
+
             targetX /= tilesize;
             targetY /= tilesize;
             startX /= tilesize;
             startY /= tilesize;
+
+            //Node[,] currentNode;
+            //Node[,] targetNode;
 
             Out.WriteLine("Start:[" + (startX+1) +"," + (startY+1) + "]");
             Out.WriteLine("Target:[" + (targetX+1) + "," + (targetY+1) + "]");
@@ -466,6 +472,15 @@ namespace PG4500_2015_Innlevering2
             queuedNodes.Enqueue(startY);
 
 			collisionMap[startY, startX].Visited = true;
+
+            while (queuedNodes.Count != 0)
+            {
+                //currentNode[] = queuedNodes.Dequeue()
+                //if (currentNode == targetNode) {
+                //  return SUCCESS
+                //}
+                //Rest of psuedo
+            }
             ///////////////////////////////////////////////////////////////////////////////////////////
             #region PSEUDO
             /*
