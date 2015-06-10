@@ -47,7 +47,7 @@ namespace PG4500_2015_Innlevering2
 
 		//Path Queue for reading path
 		private Stack<Vector2> pathStack = new Stack<Vector2>();
-
+        List<Rectangle> pathRect = new List<Rectangle>();
 
 
 		//Point to go to.
@@ -130,6 +130,9 @@ namespace PG4500_2015_Innlevering2
 				double turnAngle = Math.Atan(Math.Tan(angle));
 				WaitFor(new TurnCompleteCondition(this));
 
+                SetAhead(50f * (angle == turnAngle ? 1 : -1));
+                Execute();
+
 			}
 
             //if (X == point.X && Y == point.Y)
@@ -143,7 +146,7 @@ namespace PG4500_2015_Innlevering2
 
 		private bool FindPath(Vector2 start, Vector2 target)
 		{
-            pathDone = false;
+            //pathDone = false;
 			//Out.WriteLine("Stop Point 1");
 			//Empty the queue to avoid errors.
 			queuedNodes.Clear();
@@ -290,17 +293,19 @@ namespace PG4500_2015_Innlevering2
 						}
 					}
 				}
-				Scan();
+                //Scan();
 			}
 			return false;
 		}
 		private void makePath(Vector2 start, Vector2 target, Node[,] map)
         {
+            pathRect.Clear();
             //Stack<Vector2> path = new Stack<Vector2>();
             pathStack.Push(target);
             while (map[target.Y,target.X].Parent != start)
             {
                 target = map[target.Y,target.X].Parent;
+                pathRect.Add(new Rectangle(target.X, target.Y, 50, 50));
                 pathStack.Push(target);
             }
             paintPath = true;
@@ -337,24 +342,22 @@ namespace PG4500_2015_Innlevering2
 		}
 
 
+        //THIS SHIT AINT WORKING >:[
 
-        public override void OnPaint(IGraphics graphics)
-        {
-            //graphics.FillRectangle(Brushes.Red, Current.X * 50, Current.Y * 50, 50, 50);
-            if (paintPath)
-            {
-                List<Rectangle> pathRect = new List<Rectangle>();
-                foreach (Vector2 point in pathStack)
-                {
-                    pathRect.Add(new Rectangle(point.X, point.Y, 50, 50));
-                }
-                for (int i = 0; i > pathRect.Count; i++)
-                {
-                    graphics.FillRectangle(Brushes.Red, pathRect[i]);
-                }
-            }
+        //public override void OnPaint(IGraphics graphics)
+        //{
+        //    //graphics.FillRectangle(Brushes.Red, Current.X * 50, Current.Y * 50, 50, 50);
+        //    if (paintPath)
+        //    {
+        //        Out.WriteLine("WHY YOU NO PAINT?!");
+        //            for (int i = 0; i > pathRect.Count; i++)
+        //            {
+        //                Out.WriteLine("ARE YOU FUCKING PAINTING?");
+        //                graphics.FillRectangle(Brushes.Red, pathRect[i]);
+        //            }
+        //    }
 
-        }
+        //}
 
 		private void ReadPath()
 		{
@@ -362,7 +365,7 @@ namespace PG4500_2015_Innlevering2
             while (pathStack.Count > 0)
             {
                 temp = pathStack.Pop();
-
+                GoToPoint(temp, false);
                 Out.WriteLine("Next Point: [" + temp.X + "," + temp.Y + "]");
             }
             
