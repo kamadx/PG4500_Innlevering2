@@ -132,7 +132,7 @@ namespace PG4500_2015_Innlevering2
 		//public void GoToPoint(double pointX, double pointY, bool startPoint)
 		{
 			pathDone = false;
-			Out.WriteLine("Next point: [" + point.X + " , " + point.Y + "]");
+			//Out.WriteLine("Next point: [" + point.X + " , " + point.Y + "]");
 
 			//Go to point specified
 			if (startPoint == true)
@@ -333,11 +333,29 @@ namespace PG4500_2015_Innlevering2
 							j--;
 						}
 				}
-				Current = current;
+                Current = current;
 				// Out.WriteLine("Stop Point 8 (inside whileLoop)");
 			}
 			return false;
 		}
+        private void makePath(Node n)
+        {
+            /*
+             Skjønner du tegninga?
+             */
+            List<Node> path = new List<Node>();
+            path.Add(n);
+            while (n.Parent != null)
+            {
+                n = n.Parent;
+                path.Add(n);
+            }
+            ReadPath(path);
+
+
+        }
+
+
 		private double CalculateHScore(Vector2 current, Vector2 target)
 		//private double CalculateHScore(int currentX, int currentY, int targetX, int targetY)
 		{
@@ -346,7 +364,7 @@ namespace PG4500_2015_Innlevering2
 			int nonDiagCost = 1;
 			double diagCost = 1.414;
 			double hScore = diagCost * dMin + nonDiagCost * (dMax - dMin);
-            Out.WriteLine("Current Node: [" + current.X + "," + current.Y + "] - Hcost: " + hScore);
+            //Out.WriteLine("Current Node: [" + current.X + "," + current.Y + "] - Hcost: " + hScore);
 			return hScore;
 		}
 		private void sortNodes(List<Vector2> list, Node[,] map)
@@ -375,21 +393,21 @@ namespace PG4500_2015_Innlevering2
 
 
 
-		//public override void OnPaint(IGraphics graphics)
-		//{
-		//    graphics.FillRectangle(Brushes.Red, Current.X * 50, Current.Y * 50, 50, 50);
-		//    if (paintPath)
-		//{
+        //public override void OnPaint(IGraphics graphics)
+        //{
+        //    graphics.FillRectangle(Brushes.Red, Current.X * 50, Current.Y * 50, 50, 50);
+        //    if (paintPath)
+        //    {
 
-		//        for (int i = 0; i <= queuedNodes.Count / 2; i++)
-		//        {
+        //        for (int i = 0; i <= queuedNodes.Count / 2; i++)
+        //        {
 
-		//        }
-		//}
+        //        }
+        //    }
 
-		//}
+        //}
 
-		public void ReadPath(int currentX, int currentY)
+		public void ReadPath(List<Node> path)
 		{
 
 		}
