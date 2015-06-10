@@ -126,7 +126,11 @@ namespace PG4500_2015_Innlevering2
 						DebugProperty["Headed to coord"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
 						// DebugProperty["Headed to tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
 						Out.WriteLine("Starting FindPath()");
-						FindPath((int)(X), (int)(Y), nodeX, nodeY);
+                        if (FindPath((int)(X), (int)(Y), nodeX, nodeY))
+                        {
+                            //DrawPath();
+                        }
+						
 						// GoToPoint(nodeX, nodeY);
 					}
 
@@ -441,6 +445,8 @@ namespace PG4500_2015_Innlevering2
 			 //uʍop ǝpısdn pǝddıןɟ sı ʇıɥs sıɥʇ
 			 */
 			#endregion
+            //Empty the queue to avoid errors.
+            queuedNodes.Clear();
 
 			//Y-axis-reversed version of collisionMap to match coordinates of Robocode
 			Node[,] bottomLeft = (Node[,])collisionMap.Clone();
@@ -680,6 +686,13 @@ namespace PG4500_2015_Innlevering2
 				}
 			}
 		}
+
+        public void DrawPath()
+        {
+            /*
+             Drawing path here
+             */
+        }
 
 		public void ReadPath(int currentX, int currentY)
 		{
