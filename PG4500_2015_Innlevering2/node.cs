@@ -12,8 +12,8 @@ namespace PG4500_2015_Innlevering2
 		private int _cost;
 		private int _sector;
 		private bool _visited;
-		private float _gScore;
-		private float _hScore;
+		private double _gScore;
+		private double _hScore;
 
 		public bool Walkable { get { return _walkable; } set { _walkable = value; } }
 		public int Cost { get { return _cost; } set { _cost = value; } }
