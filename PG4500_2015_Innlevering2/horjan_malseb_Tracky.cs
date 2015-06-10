@@ -244,6 +244,7 @@ namespace PG4500_2015_Innlevering2
 						neighbours.RemoveAt(i);
 						neighbours.RemoveAt(i);
 						i -= 2;
+						continue;
                         Out.WriteLine("Stop Point 3 - Inside NeighborCheck");
 					}
                     Out.WriteLine("Stop Point 4 - Inside NeighborCheck"); //<- Crashes here after several iterations
