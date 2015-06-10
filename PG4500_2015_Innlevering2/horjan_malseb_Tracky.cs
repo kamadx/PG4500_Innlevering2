@@ -463,8 +463,8 @@ namespace PG4500_2015_Innlevering2
 				}
 				y2++;
 			}
-            gScore = 0;
-            fScore = 0;
+			gScore = 0;
+			fScore = 0;
 
 			//Set every Node to not visited.
 			foreach (Node n in bottomLeft)
@@ -484,10 +484,10 @@ namespace PG4500_2015_Innlevering2
 			Out.WriteLine("Target:[" + (targetX + 1) + "," + (targetY + 1) + "]");
 
 
-            startNode.Visited = true;
+			startNode.Visited = true;
 			startNode.GScore = startNode.Cost;
 			startNode.HScore = CalculateHScore(startX, startY, targetX, targetY);
-			
+
 			//this ain't right!
 			//queuedNodes.Enqueue(startNode);
 
@@ -536,7 +536,7 @@ namespace PG4500_2015_Innlevering2
 						neighbours.Add(currentX - 1);
 					}
 				}
-				
+
 				if (currentX < bottomLeft.GetLength(1))
 				{
 					neighbours.Add(currentY);
@@ -585,12 +585,12 @@ namespace PG4500_2015_Innlevering2
 				}
 				#endregion
 
-                #region Calculate distance
-                //H Cost - Diagonal Distance
+				#region Calculate distance
+				//H Cost - Diagonal Distance
 				//currentNode.HScore = CalculateHScore(currentX, currentY, targetX, targetY);
 
 				//calculate distance by A* method
-				for (int i = 0; i < neighbours.Count; i+= 2)
+				for (int i = 0; i < neighbours.Count; i += 2)
 				{
 					Node neighbour = bottomLeft[neighbours[i], neighbours[i + 1]];
 					neighbour.GScore = currentNode.GScore + neighbour.Cost;
@@ -603,6 +603,18 @@ namespace PG4500_2015_Innlevering2
 				queuedNodes.AddRange(neighbours);
 				sortNodes(queuedNodes, bottomLeft);
 				#endregion
+
+				//remove duplicates
+				for (int i = 0; i < queuedNodes.Count - 2; i += 2)
+				{
+					if (queuedNodes[i] == queuedNodes[i + 2] && queuedNodes[i + 1] == queuedNodes[i + 3])
+					{
+						queuedNodes.RemoveAt(i);
+						queuedNodes.RemoveAt(i);
+						i -= 2;
+					}
+				}
+
 			}
 			return false;
 			#region PSEUDO
@@ -668,10 +680,10 @@ namespace PG4500_2015_Innlevering2
 
 		private void sortNodes(List<int> list, Node[,] map)
 		{
-			for (int i = 0; i < list.Count-2; i += 2)
+			for (int i = 0; i < list.Count - 2; i += 2)
 			{
-				Node n1 = map[i,i+1];
-				Node n2 = map[i+2,i+3];
+				Node n1 = map[i, i + 1];
+				Node n2 = map[i + 2, i + 3];
 				//preliminarily a primitive bubble sort.
 				if (n1.FScore > n2.FScore)
 				{
