@@ -19,10 +19,10 @@ namespace PG4500_2015_Innlevering2
 		public int Cost { get { return _cost; } set { _cost = value; } }
 		public int Sector { get { return _sector; } set { _sector = value; } }
 		public bool Visited { get { return _visited; } set { _visited = value; } }
-		public float GScore { get { return _gScore; } set { _gScore = value; } }
-		public float HScore { get { return _hScore; } set { _hScore = value; } }
+		public double GScore { get { return _gScore; } set { _gScore = value; } }
+		public double HScore { get { return _hScore; } set { _hScore = value; } }
 		//returns a calculated value, but I hold that the value is simple enough to be considered a property.
-		public float FScore { get { return HScore + GScore; } }
+		public double FScore { get { return HScore + GScore; } }
 
 		public Node(bool walkable = false, int cost = 1, int sector = 0)
 		{
