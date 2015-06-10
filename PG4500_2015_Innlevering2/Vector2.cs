@@ -8,12 +8,12 @@ namespace roboUtil
 {
 	class Vector2
 	{
-		private double _x;
-		private double _y;
-		public double X { get { return _x; } set { _x = value; } }
-		public double Y { get { return _y; } set { _y = value; } }
+		private int _x;
+		private int _y;
+		public int X { get { return _x; } set { _x = value; } }
+		public int Y { get { return _y; } set { _y = value; } }
 
-		public Vector2(double x, double y)
+		public Vector2(int x, int y)
 		{
 			X = x;
 			Y = y;
@@ -30,12 +30,12 @@ namespace roboUtil
 
 		public static Vector2 operator *(Vector2 v, double d)
 		{
-			return new Vector2(v.X * d, v.Y * d);
+			return new Vector2((int)(v.X * d), (int)(v.Y * d));
 		}
 
 		public static Vector2 operator /(Vector2 v, double d)
 		{
-			return new Vector2(v.X / d, v.Y / d);
+			return new Vector2((int)(v.X / d), (int)(v.Y / d));
 		}
 	}
 }
