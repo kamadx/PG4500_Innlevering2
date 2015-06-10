@@ -126,7 +126,7 @@ namespace PG4500_2015_Innlevering2
 			Node[,] bottomLeft = (Node[,])collisionMap.Clone();
 			for (int y = collisionMap.GetLength(0), y2 = 0; y >= 0; y--)
 			{
-				for (int x = 0; x <= collisionMap.GetLength(1); y++)
+				for (int x = 0; x <= collisionMap.GetLength(1); x++)
 				{
 					bottomLeft[y2, x] = collisionMap[y, x];
 				}
