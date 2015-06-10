@@ -51,20 +51,14 @@ namespace PG4500_2015_Innlevering2
 
 
 		//Point to go to.
-		private int nodeX, nodeY;
 		private Vector2 node;
 		private Vector2 robotPosition;
 		private const int tilesize = 50;
 		private const int mapWidth = 16, mapHeight = 12;
 		// private const int found = 1, nonexistent = 2;
 		private bool enemyStopped;
-		private bool pathDone;
 		private bool paintPath;
 
-
-		//DEBUG STUFF
-		private Vector2 Current;
-		//private int CurrentX, CurrentY;
 
 
 		private RobotStatus robotStatus;
@@ -72,19 +66,14 @@ namespace PG4500_2015_Innlevering2
 		public override void Run()
 		{
 			paintPath = false;
-			pathDone = false;
 			SetColors(Color.LightBlue, Color.Blue, Color.Tan, Color.Yellow, Color.Tan);
 			enemyStopped = false;
-			//Startup - Go to (25, 25) and wait.
 			node = new Vector2(25, 25);
 			robotPosition = new Vector2((int)X, (int)Y);
-			//nodeX = 25;
-			//nodeY = 25;
-			DebugProperty["Headed to coord"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
-			DebugProperty["Headed to Tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
+			DebugProperty["Headed to coord"] = "(" + node.X.ToString() + "," + node.Y.ToString() + ")";
+			DebugProperty["Headed to Tile"] = "(" + node.X / tilesize + "," + node.Y / tilesize + ")";
 			GoToPoint(node, true);
 			WaitFor(new MoveCompleteCondition(this));
-			pathDone = true;
 			Out.WriteLine("#{0}\t{1}", Time, "Arrived at (" + X.ToString() + "," + Y.ToString() + ").");
 			//SetTurnRight(180);
 
@@ -98,7 +87,7 @@ namespace PG4500_2015_Innlevering2
 
 				if (Velocity == 0)
 				{
-					if (enemyStopped && pathDone)
+					if (enemyStopped)
 					{
 						DebugProperty["Headed to coord"] = "(" + node.X.ToString() + "," + node.Y.ToString() + ")";
 						// DebugProperty["Headed to tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
@@ -131,7 +120,6 @@ namespace PG4500_2015_Innlevering2
 		private void GoToPoint(Vector2 point, bool startPoint)
 		//public void GoToPoint(double pointX, double pointY, bool startPoint)
 		{
-			pathDone = false;
 			//Out.WriteLine("Next point: [" + point.X + " , " + point.Y + "]");
 
 			//Go to point specified
@@ -153,22 +141,11 @@ namespace PG4500_2015_Innlevering2
 				double angle = Util.NormalRelativeAngle(Math.Atan2((point.X * 50), (point.Y * 50)) - HeadingRadians);
 				double turnAngle = Math.Atan(Math.Tan(angle));
 				WaitFor(new TurnCompleteCondition(this));
-
 			}
-
-			if (X == point.X && Y == point.Y)
-			{
-				pathDone = true;
-			}
-
-
-
 		}
 
 		private bool FindPath(Vector2 start, Vector2 target)
-		//public bool FindPath(int startX, int startY, int targetX, int targetY)
 		{
-			//Out.WriteLine("Stop Point 1");
 			//Empty the queue to avoid errors.
 			queuedNodes.Clear();
 
@@ -177,23 +154,19 @@ namespace PG4500_2015_Innlevering2
 			int y2 = 0;
 			for (int y = collisionMap.GetLength(0) - 1; y >= 0; y--)
 			{
-				//Out.WriteLine("Stop Point 1a");
 				for (int x = 0; x < collisionMap.GetLength(1); x++)
 				{
-					//Out.WriteLine("Stop Point 1b");
 					bottomLeft[y2, x] = collisionMap[y, x];
-					//Out.WriteLine("Stop Point 1c");
 				}
 				y2++;
-				//Out.WriteLine("Stop Point 1d");
 			}
 
-			//Out.WriteLine("Stop Point 2");
-			//Set every Node to not visited.
+			//Initialize all nodes
 			foreach (Node n in bottomLeft)
 			{
 				n.Init();
 			}
+
 			target /= tilesize;
 			start /= tilesize;
 
@@ -202,7 +175,6 @@ namespace PG4500_2015_Innlevering2
 
 			Out.WriteLine("Start:[" + (start.X) + "," + (start.Y) + "]");
 			Out.WriteLine("Target:[" + (target.X) + "," + (target.Y) + "]");
-            //Out.WriteLine("Stop Point 1");
 
 			startNode.Visited = true;
 			startNode.GScore = 0;
@@ -211,20 +183,16 @@ namespace PG4500_2015_Innlevering2
 			queuedNodes.Add(start);
 			while (queuedNodes.Count > 0)
 			{
-               
 				//Acting sort of like a queue.
 				Vector2 current = queuedNodes[0];
 				queuedNodes.RemoveAt(0);
-
-
-				//Out.WriteLine("CurrentNode: [" + current.X + "," + current.Y + "]");
 
 				Node currentNode = bottomLeft[current.Y, current.X];
 				if (currentNode == targetNode)
 				{
 					//We arrived!
                     Out.WriteLine("WE DID IT, REDDIT!");
-                    makePath(current, bottomLeft, start);
+					makePath(start, current, bottomLeft);
                    
 					return true;
 				}
@@ -273,6 +241,7 @@ namespace PG4500_2015_Innlevering2
 				{
 					neighbours.Add(new Vector2(current.X, current.Y - 1));
 				}
+
 				//remove all visited nodes.
 				for (int i = 0; i < neighbours.Count; i++)
 				{
@@ -291,7 +260,6 @@ namespace PG4500_2015_Innlevering2
 				#endregion
 
 				#region Calculate distance
-				// Out.WriteLine("Stop Point 5 (inside whileLoop)");
 				//calculate distance by A* method
 				foreach (Vector2 neighbourCoord in neighbours)
 				{
@@ -305,6 +273,7 @@ namespace PG4500_2015_Innlevering2
 					//}
 				}
 				#endregion
+
 				#region Sort nodes
 				//sort nodes by FCost.
 				queuedNodes.AddRange(neighbours);
@@ -322,11 +291,11 @@ namespace PG4500_2015_Innlevering2
 						}
 					}
 				}
-                Current = current;
+				Scan();
 			}
 			return false;
 		}
-        private void makePath(Vector2 target, Node[,] map, Vector2 start)
+		private void makePath(Vector2 start, Vector2 target, Node[,] map)
         {
             Stack<Vector2> path = new Stack<Vector2>();
             path.Push(target);
