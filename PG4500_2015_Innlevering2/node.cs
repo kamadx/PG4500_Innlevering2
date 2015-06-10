@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace roboUtil
 {
 	class Node
@@ -23,6 +18,7 @@ namespace roboUtil
 		public double GScore { get { return _gScore; } set { _gScore = value; } }
 		public double HScore { get { return _hScore; } set { _hScore = value; } }
 		public Vector2 Parent { get { return _parent; } set { _parent = value; } }
+
 		//returns a calculated value, but I hold that the value is simple enough to be considered a property.
 		public double FScore { get { return HScore + GScore; } }
 

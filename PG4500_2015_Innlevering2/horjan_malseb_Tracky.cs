@@ -1,16 +1,17 @@
 ﻿using Robocode;
-using Util = Robocode.Util.Utils;
-using System;
-using System.Drawing;
-using System.Collections.Generic;
-using System.Collections;
 using roboUtil;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using Util = Robocode.Util.Utils;
 
 namespace PG4500_2015_Innlevering2
 {
 	public class horjan_malseb_Tracky : AdvancedRobot
 	{
 		/*
+		 * Early pseudocode/checklist, abandoned. Kept for posterity.
+		 * 
 		 TODO: Find target <- Done 
 		 TODO: DEBUG: Just go target, then wait for new target. Repeat. <- Done
 		 TODO: A* Algorithm
@@ -59,7 +60,6 @@ namespace PG4500_2015_Innlevering2
 
 
 
-		private RobotStatus robotStatus;
 
 		public override void Run()
 		{
@@ -76,7 +76,6 @@ namespace PG4500_2015_Innlevering2
 			WaitFor(new MoveCompleteCondition(this));
 			pathDone = true;
 			Out.WriteLine("#{0}\t{1}", Time, "Arrived at (" + X.ToString() + "," + Y.ToString() + ").");
-			//SetTurnRight(180);
 
 
 
@@ -103,15 +102,20 @@ namespace PG4500_2015_Innlevering2
 			}
 		}
 
-		//Instructs the robot to move to a specific place.
+		/// <summary>
+		/// Instructs the robot to move to a specific place.
+		/// </summary>
+		/// <remarks>For some reason it startet refusing to turn, and towards the end of the project's lifetime it crashed completely and we bungled our attempt at recovering its functionality.
+		/// It seems to drive in the general direction of things now.</remarks>
+		/// <param name="point">Point you wish to go to.</param>
 		private void GoToPoint(Vector2 point)
 		{
 			pathDone = false;
 			point *= 50;
 			point -= robotPosition;
 			point += centerOfTile;
-            int pointX = ((point.X * 50) + 25);
-            int pointY = ((point.Y * 50) + 25);
+			int pointX = ((point.X * 50) + 25);
+			int pointY = ((point.Y * 50) + 25);
 
 			double distance = Math.Sqrt(Math.Pow(point.X, 2) + Math.Pow(point.Y, 2));
 			double angle = Util.NormalRelativeAngle(Math.Atan2(point.X, point.Y) - HeadingRadians);
@@ -131,6 +135,12 @@ namespace PG4500_2015_Innlevering2
 
 		}
 
+		/// <summary>
+		/// Find the shortest path to target by using the A* algorithm.
+		/// </summary>
+		/// <param name="start">Start point for the search.</param>
+		/// <param name="target">Point you are trying to reach.</param>
+		/// <returns>True if a path is found, else false.</returns>
 		private bool FindPath(Vector2 start, Vector2 target)
 		{
 			//Empty the queue to avoid errors.
@@ -282,6 +292,13 @@ namespace PG4500_2015_Innlevering2
 			}
 			return false;
 		}
+
+		/// <summary>
+		/// Constructs a path from start to target, based on the provided map.
+		/// </summary>
+		/// <param name="start">Start point for the path</param>
+		/// <param name="target">Point you are trying to reach.</param>
+		/// <param name="map">Map containing your nodes, prepared with FCost, Parent and the like.</param>
 		private void makePath(Vector2 start, Vector2 target, Node[,] map)
 		{
 			pathRect.Clear();
@@ -298,7 +315,12 @@ namespace PG4500_2015_Innlevering2
 
 		}
 
-
+		/// <summary>
+		/// Calculates the HScore (IE cost to go from here to target) of a node.
+		/// </summary>
+		/// <param name="current">Current node.</param>
+		/// <param name="target">Node you wish to reach.</param>
+		/// <returns></returns>
 		private double CalculateHScore(Vector2 current, Vector2 target)
 		{
 			int dMax = Math.Max(Math.Abs(current.X - target.X), Math.Abs(current.Y - target.Y));
@@ -327,6 +349,7 @@ namespace PG4500_2015_Innlevering2
 
 
 		//THIS SHIT AINT WORKING >:[
+		//@Kamad language.
 
 		//public override void OnPaint(IGraphics graphics)
 		//{
@@ -340,9 +363,11 @@ namespace PG4500_2015_Innlevering2
 		//                graphics.FillRectangle(Brushes.Red, pathRect[i]);
 		//            }
 		//    }
-
 		//}
 
+		/// <summary>
+		/// Reads the path and sends instructions to move across it.
+		/// </summary>
 		private void ReadPath()
 		{
 			Vector2 temp;
@@ -354,21 +379,6 @@ namespace PG4500_2015_Innlevering2
 			}
 			pathDone = true;
 
-		}
-
-		public int ReadPathX(int pathLocation)
-		{
-			return 0;
-		}
-
-		public int ReadPathY(int pathLocation)
-		{
-			return 0;
-		}
-
-		public override void OnStatus(StatusEvent e)
-		{
-			robotStatus = e.Status;
 		}
 
 		public override void OnScannedRobot(ScannedRobotEvent e)
@@ -387,17 +397,21 @@ namespace PG4500_2015_Innlevering2
 			}
 		}
 
+		/// <summary>
+		/// Calculates the position of the "enemy"
+		/// </summary>
+		/// <param name="e">Passed down Scan event from OnScannedRobot</param>
 		public void FindEnemyCoords(ScannedRobotEvent e)
 		{
 			double angleToEnemy = e.Bearing;
 
 			// Calculate the angle to the scanned robot
-			double angle = Util.ToRadians(robotStatus.Heading + angleToEnemy % 360);
+			double angle = Util.ToRadians(Heading + angleToEnemy % 360);
 
 
 			// Calculate the coordinates of the robot
-			node.X = (int)(robotStatus.X + Math.Sin(angle) * e.Distance);
-			node.Y = (int)(robotStatus.Y + Math.Cos(angle) * e.Distance);
+			node.X = (int)(X + Math.Sin(angle) * e.Distance);
+			node.Y = (int)(Y + Math.Cos(angle) * e.Distance);
 		}
 	}
 }
