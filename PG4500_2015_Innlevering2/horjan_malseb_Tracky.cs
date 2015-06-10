@@ -297,6 +297,10 @@ namespace PG4500_2015_Innlevering2
 
 		private void sortNodes(List<int> list, Node[,] map)
 		{
+			if (list.Count % 2 != 0)
+			{
+				Out.WriteLine("The list isn't even. What the fuck?");
+			}
             Out.WriteLine("Stop Point 1 (inside SortNode())");
 			for (int i = 0; i < list.Count - 2; i += 2)
 			{
