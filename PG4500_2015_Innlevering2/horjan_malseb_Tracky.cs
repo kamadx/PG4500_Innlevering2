@@ -286,21 +286,6 @@ namespace PG4500_2015_Innlevering2
 						i--;
 					}
 				}
-				foreach (Vector2 neighourCoord in neighbours)
-				{
-					Node neighbour = bottomLeft[neighourCoord.Y,neighourCoord.X];
-					if (neighbour.Parent == null)
-					{
-						neighbour.Parent = current;
-					}
-					else
-					{
-						if (neighbour.GScore != 0 && neighbour.GScore > currentNode.GScore + neighbour.Cost)
-						{
-							neighbour.Parent = current;
-						}
-					}
-				}
 				#endregion
 
 				#region Calculate distance
@@ -309,40 +294,39 @@ namespace PG4500_2015_Innlevering2
 				foreach (Vector2 neighbourCoord in neighbours)
 				{
 					Node neighbour = bottomLeft[neighbourCoord.Y, neighbourCoord.X];
-					neighbour.GScore = currentNode.GScore + neighbour.Cost;
+					if (neighbour.GScore > currentNode.GScore + neighbour.Cost)
+					{
+						neighbour.GScore = currentNode.GScore + neighbour.Cost;
+						neighbour.Parent = current;
+					}
+					//neighbour.GScore = currentNode.GScore + neighbour.Cost;
 					neighbour.HScore = CalculateHScore(neighbourCoord, target);
 					//}
 				}
 				#endregion
-				//Out.WriteLine("Stop Point 6 (inside whileLoop)");
 				#region Sort nodes
 				//sort nodes by FCost.
 				queuedNodes.AddRange(neighbours);
-				//Out.WriteLine("Stop Point 6a (inside whileLoop)");
 				sortNodes(queuedNodes, bottomLeft);
-				//Out.WriteLine("Stop Point 6b (inside whileLoop)");
 				#endregion
-				//Out.WriteLine("Stop Point 7 (inside whileLoop)");
 				//remove duplicates
 				for (int i = 0; i < queuedNodes.Count - 1; i++)
 				{
 					for (int j = i + 1; j < queuedNodes.Count; j++)
+					{ 
 						if (queuedNodes[i] == queuedNodes[j])
 						{
 							queuedNodes.RemoveAt(j);
 							j--;
 						}
+					}
 				}
                 Current = current;
-				// Out.WriteLine("Stop Point 8 (inside whileLoop)");
 			}
 			return false;
 		}
         private void makePath(Vector2 target, Node[,] map)
         {
-            /*
-             Skjønner du tegninga?
-             */
             List<Vector2> path = new List<Vector2>();
             path.Add(target);
             while (map[target.Y,target.X].Parent != null)
@@ -357,35 +341,26 @@ namespace PG4500_2015_Innlevering2
 
 
 		private double CalculateHScore(Vector2 current, Vector2 target)
-		//private double CalculateHScore(int currentX, int currentY, int targetX, int targetY)
 		{
 			int dMax = Math.Max(Math.Abs(current.X - target.X), Math.Abs(current.Y - target.Y));
 			int dMin = Math.Min(Math.Abs(current.X - target.X), Math.Abs(current.Y - target.Y));
 			int nonDiagCost = 1;
 			double diagCost = 1.414;
 			double hScore = diagCost * dMin + nonDiagCost * (dMax - dMin);
-            //Out.WriteLine("Current Node: [" + current.X + "," + current.Y + "] - Hcost: " + hScore);
 			return hScore;
 		}
 		private void sortNodes(List<Vector2> list, Node[,] map)
-		//private void sortNodes(List<int> list, Node[,] map)
 		{
 			for (int i = 0; i < list.Count - 1; i++)
 			{
-				//Out.WriteLine("Stop Point 2 (inside SortNode())");
 				Node n1 = map[list[i].Y, list[i].X];
-				//Out.WriteLine("Stop Point 2a (inside SortNode())");
 				Node n2 = map[list[i + 1].Y, list[i + 1].X];
-				//Out.WriteLine("Stop Point 3 (inside SortNode())");
                 
 				//preliminarily a primitive bubble sort.
 				if (n1.FScore > n2.FScore)
 				{
-				//	Out.WriteLine("Stop Point 4 (inside SortNode())");
 					Vector2 temp = list[i];
-				//	Out.WriteLine("Stop Point 4a (inside SortNode())");
 					list[i] = list[i + 1];
-				//	Out.WriteLine("Stop Point 4b (inside SortNode())");
 					list[i + 1] = temp;
 				}
 			}

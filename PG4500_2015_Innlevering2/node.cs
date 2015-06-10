@@ -37,7 +37,7 @@ namespace roboUtil
 		public void Init()
 		{
 			Visited = false;
-			GScore = 0;
+			GScore = int.MaxValue;
 			HScore = 0;
 			_parent = null;
 		}
