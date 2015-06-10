@@ -338,17 +338,17 @@ namespace PG4500_2015_Innlevering2
 			}
 			return false;
 		}
-        private void makePath(Node n)
+        private void makePath(Vector2 target, Node[,] map)
         {
             /*
              Skjønner du tegninga?
              */
-            List<Node> path = new List<Node>();
-            path.Add(n);
-            while (n.Parent != null)
+            List<Vector2> path = new List<Vector2>();
+            path.Add(target);
+            while (map[target.Y,target.X].Parent != null)
             {
-                n = n.Parent;
-                path.Add(n);
+                target = map[target.Y,target.X].Parent;
+                path.Add(target);
             }
             ReadPath(path);
 
@@ -407,7 +407,7 @@ namespace PG4500_2015_Innlevering2
 
         //}
 
-		public void ReadPath(List<Node> path)
+		public void ReadPath(List<Vector2> path)
 		{
 
 		}
