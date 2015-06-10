@@ -106,18 +106,18 @@ namespace PG4500_2015_Innlevering2
 						if (FindPath(new Vector2((int)X, (int)Y), node))
 						//if (FindPath((int)(X), (int)(Y), nodeX, nodeY))
 						{
-							paintPath = true;
-							//int x = 0, y = 0;
-							Vector2 position;
-							for (int i = 0; i <= queuedNodes.Count; i++)
-							{
-								//Debug
-								position = queuedNodes[0];
-								queuedNodes.RemoveAt(0);
-								//x = queuedNodes[0];
-								//queuedNodes.RemoveAt(0);
-								GoToPoint(position, false);
-							}
+                            //paintPath = true;
+                            ////int x = 0, y = 0;
+                            //Vector2 position;
+                            //for (int i = 0; i <= queuedNodes.Count; i++)
+                            //{
+                            //    //Debug
+                            //    position = queuedNodes[0];
+                            //    queuedNodes.RemoveAt(0);
+                            //    //x = queuedNodes[0];
+                            //    //queuedNodes.RemoveAt(0);
+                            //    GoToPoint(position, false);
+                            //}
 						}
 
 					}
@@ -217,13 +217,15 @@ namespace PG4500_2015_Innlevering2
 				queuedNodes.RemoveAt(0);
 
 
-				Out.WriteLine("CurrentNode: [" + current.X + "," + current.Y + "]");
+				//Out.WriteLine("CurrentNode: [" + current.X + "," + current.Y + "]");
 
 				Node currentNode = bottomLeft[current.Y, current.X];
 				if (currentNode == targetNode)
 				{
 					//We arrived!
-                    
+                    Out.WriteLine("WE DID IT, REDDIT!");
+                    makePath(current, bottomLeft, start);
+                   
 					return true;
 				}
 				//Set current node as a visited node.
@@ -324,14 +326,14 @@ namespace PG4500_2015_Innlevering2
 			}
 			return false;
 		}
-        private void makePath(Vector2 target, Node[,] map)
+        private void makePath(Vector2 target, Node[,] map, Vector2 start)
         {
-            List<Vector2> path = new List<Vector2>();
-            path.Add(target);
-            while (map[target.Y,target.X].Parent != null)
+            Stack<Vector2> path = new Stack<Vector2>();
+            path.Push(target);
+            while (map[target.Y,target.X].Parent != start)
             {
                 target = map[target.Y,target.X].Parent;
-                path.Add(target);
+                path.Push(target);
             }
             ReadPath(path);
 
@@ -381,9 +383,15 @@ namespace PG4500_2015_Innlevering2
 
         //}
 
-		public void ReadPath(List<Vector2> path)
+		private void ReadPath(Stack<Vector2> path)
 		{
-
+            Vector2 temp;
+            while (path.Count > 0)
+            {
+                temp = path.Pop();
+                Out.WriteLine("Next Point: [" + temp.X + "," + temp.Y + "]");
+            }
+            
 		}
 
 		public int ReadPathX(int pathLocation)
