@@ -250,14 +250,10 @@ namespace PG4500_2015_Innlevering2
 						i -= 2;
 					}
 				}
-				for (int i = 0; i < neighbours.Count; i += 2)
-				{
-					Node testNode = bottomLeft[i, i + 1];
-					Out.WriteLine("node exists. If this throws errors neighbour check is wrong.");
-				}
 				#endregion
-                Out.WriteLine("Stop Point 5 (inside whileLoop)");
+
 				#region Calculate distance
+                Out.WriteLine("Stop Point 5 (inside whileLoop)");
 				//calculate distance by A* method
 				for (int i = 0; i < neighbours.Count; i += 2)
 				{
@@ -307,11 +303,11 @@ namespace PG4500_2015_Innlevering2
 				Out.WriteLine("The list isn't even. What the fuck?");
 			}
             Out.WriteLine("Stop Point 1 (inside SortNode())");
-			for (int i = 0; i < list.Count - 3; i += 2)
+			for (int i = 0; i < list.Count - 2; i += 2)
 			{
                 Out.WriteLine("Stop Point 2 (inside SortNode())");
-				Node n1 = map[i, i + 1];
-				Node n2 = map[i + 2, i + 3];
+				Node n1 = map[list[i], list[i + 1]];
+				Node n2 = map[list[i + 2], list[i + 3]];
                 Out.WriteLine("Stop Point 3 (inside SortNode())");
 				//preliminarily a primitive bubble sort.
 				if (n1.FScore > n2.FScore)
