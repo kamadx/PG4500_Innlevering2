@@ -58,21 +58,22 @@ namespace PG4500_2015_Innlevering2
 		private const int mapWidth = 16, mapHeight = 12;
 		// private const int found = 1, nonexistent = 2;
 		private bool enemyStopped;
-        private bool pathDone;
-        private bool paintPath;
+		private bool pathDone;
+		private bool paintPath;
 
 
-        //DEBUG STUFF
-        private int CurrentX, CurrentY;
+		//DEBUG STUFF
+		private Vector2 Current;
+		//private int CurrentX, CurrentY;
 
 
 		private RobotStatus robotStatus;
 
 		public override void Run()
 		{
-            paintPath = false;
-            pathDone = false;
-            SetColors(Color.LightBlue, Color.Blue, Color.Tan, Color.Yellow, Color.Tan);
+			paintPath = false;
+			pathDone = false;
+			SetColors(Color.LightBlue, Color.Blue, Color.Tan, Color.Yellow, Color.Tan);
 			enemyStopped = false;
 			//Startup - Go to (25, 25) and wait.
 			node = new Vector2(25, 25);
@@ -81,9 +82,9 @@ namespace PG4500_2015_Innlevering2
 			//nodeY = 25;
 			DebugProperty["Headed to coord"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
 			DebugProperty["Headed to Tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
-			GoToPoint(nodeX, nodeY, true);
+			GoToPoint(node, true);
 			WaitFor(new MoveCompleteCondition(this));
-            pathDone = true;
+			pathDone = true;
 			Out.WriteLine("#{0}\t{1}", Time, "Arrived at (" + X.ToString() + "," + Y.ToString() + ").");
 			//SetTurnRight(180);
 
@@ -102,25 +103,25 @@ namespace PG4500_2015_Innlevering2
 						DebugProperty["Headed to coord"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
 						// DebugProperty["Headed to tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
 						Out.WriteLine("Starting FindPath()");
-						if (FindPath(robotPosition, node))
+						if (FindPath(new Vector2((int)X, (int)Y), node))
 						//if (FindPath((int)(X), (int)(Y), nodeX, nodeY))
-                        {
-                            paintPath = true;
-                            int x = 0, y = 0;
+						{
+							paintPath = true;
+							int x = 0, y = 0;
 							Vector2 position;
-                            for (int i = 0; i <= queuedNodes.Count / 2; i++)
-                            {
-                                //Debug
+							for (int i = 0; i <= queuedNodes.Count / 2; i++)
+							{
+								//Debug
 								position = queuedNodes[0];
 								queuedNodes.RemoveAt(0);
 								//y = queuedNodes[0];
 								//queuedNodes.RemoveAt(0);
 								//x = queuedNodes[0];
 								//queuedNodes.RemoveAt(0);
-                                GoToPoint(x, y, false);
-                            }
-                        }
-						
+								GoToPoint(position, false);
+							}
+						}
+
 					}
 
 				}
@@ -129,76 +130,76 @@ namespace PG4500_2015_Innlevering2
 		}
 
 		//Instructs the robot to move to a specific place.
-		//public void GoToPoint(Vector2 point, bool startPoint)
-		public void GoToPoint(double pointX, double pointY, bool startPoint)
+		public void GoToPoint(Vector2 point, bool startPoint)
+		//public void GoToPoint(double pointX, double pointY, bool startPoint)
 		{
-            pathDone = false;
-            Out.WriteLine("Next point: [" + pointX + " , " + pointY + "]");
-			
-            //Go to point specified
-            if (startPoint == true)
-            {
-				//point -= robotPosition;
-                pointX -= X;
-                pointY -= Y;
+			pathDone = false;
+			Out.WriteLine("Next point: [" + point.X + " , " + point.Y + "]");
 
-                double distance = Math.Sqrt(Math.Pow(pointX, 2) + Math.Pow(pointY, 2));
-                double angle = Util.NormalRelativeAngle(Math.Atan2(pointX, pointY) - HeadingRadians);
+			//Go to point specified
+			if (startPoint == true)
+			{
+				point -= robotPosition;
+				//pointX -= X;
+				//pointY -= Y;
 
-                double turnAngle = Math.Atan(Math.Tan(angle));
-                SetTurnRightRadians(turnAngle);
-                WaitFor(new TurnCompleteCondition(this));
-                SetAhead(distance * (angle == turnAngle ? 1 : -1));
-                Execute();
-            }
-            else
-            {
-                double angle = Util.NormalRelativeAngle(Math.Atan2((pointX*50), (pointY*50)) - HeadingRadians);
-                double turnAngle = Math.Atan(Math.Tan(angle));
-                WaitFor(new TurnCompleteCondition(this));
-                
-            }
-                
-            if (X == pointX && Y == pointY)
-            {
-                pathDone = true;
-            }
-            
+				double distance = Math.Sqrt(Math.Pow(point.X, 2) + Math.Pow(point.Y, 2));
+				double angle = Util.NormalRelativeAngle(Math.Atan2(point.X, point.Y) - HeadingRadians);
 
-			
+				double turnAngle = Math.Atan(Math.Tan(angle));
+				SetTurnRightRadians(turnAngle);
+				WaitFor(new TurnCompleteCondition(this));
+				SetAhead(distance * (angle == turnAngle ? 1 : -1));
+				Execute();
+			}
+			else
+			{
+				double angle = Util.NormalRelativeAngle(Math.Atan2((point.X * 50), (point.Y * 50)) - HeadingRadians);
+				double turnAngle = Math.Atan(Math.Tan(angle));
+				WaitFor(new TurnCompleteCondition(this));
+
+			}
+
+			if (X == point.X && Y == point.Y)
+			{
+				pathDone = true;
+			}
+
+
+
 		}
 
-		public bool FindPath(Vector2 start, Vector2 target)
+		private bool FindPath(Vector2 start, Vector2 target)
 		//public bool FindPath(int startX, int startY, int targetX, int targetY)
 		{
-            //Out.WriteLine("Stop Point 1");
-            //Empty the queue to avoid errors.
-            queuedNodes.Clear();
+			//Out.WriteLine("Stop Point 1");
+			//Empty the queue to avoid errors.
+			queuedNodes.Clear();
 
 			//Y-axis-reversed version of collisionMap to match coordinates of Robocode
 			Node[,] bottomLeft = (Node[,])collisionMap.Clone();
 			int y2 = 0;
-            for (int y = collisionMap.GetLength(0) - 1; y >= 0; y--)
+			for (int y = collisionMap.GetLength(0) - 1; y >= 0; y--)
 			{
-                //Out.WriteLine("Stop Point 1a");
+				//Out.WriteLine("Stop Point 1a");
 				for (int x = 0; x < collisionMap.GetLength(1); x++)
 				{
-                   // Out.WriteLine("Stop Point 1b");
+					// Out.WriteLine("Stop Point 1b");
 					bottomLeft[y2, x] = collisionMap[y, x];
-                    //Out.WriteLine("Stop Point 1c");
+					//Out.WriteLine("Stop Point 1c");
 				}
 				y2++;
-               // Out.WriteLine("Stop Point 1d");
+				// Out.WriteLine("Stop Point 1d");
 			}
 
-               // Out.WriteLine("Stop Point 2");
+			// Out.WriteLine("Stop Point 2");
 			//Set every Node to not visited.
 			foreach (Node n in bottomLeft)
 			{
 				n.Init();
 			}
 			target /= tilesize;
-           // Out.WriteLine("Stop Point 3");
+			// Out.WriteLine("Stop Point 3");
 			//targetX /= tilesize;
 			//targetY /= tilesize;
 			start /= tilesize;
@@ -212,7 +213,7 @@ namespace PG4500_2015_Innlevering2
 
 			Out.WriteLine("Start:[" + (start.X) + "," + (start.Y) + "]");
 			Out.WriteLine("Target:[" + (target.X) + "," + (target.Y) + "]");
-            //Out.WriteLine("Stop Point 1");
+			//Out.WriteLine("Stop Point 1");
 
 			startNode.Visited = true;
 			startNode.GScore = 0;
@@ -222,11 +223,11 @@ namespace PG4500_2015_Innlevering2
 			queuedNodes.Add(start);
 			//queuedNodes.Add(startY);
 			//queuedNodes.Add(startX);
-           // Out.WriteLine("Stop Point 4");
+			// Out.WriteLine("Stop Point 4");
 			while (queuedNodes.Count > 0)
 			{
-               
-                //Out.WriteLine("Stop Point 1 (inside whileLoop)");
+
+				//Out.WriteLine("Stop Point 1 (inside whileLoop)");
 				//Acting sort of like a queue.
 				Vector2 current = queuedNodes[0];
 				//int currentY = queuedNodes[0];
@@ -236,7 +237,7 @@ namespace PG4500_2015_Innlevering2
 				//queuedNodes.RemoveAt(0);
 
 
-                Out.WriteLine("CurrentNode: ["+current.X+ ","+current.Y+"]");
+				Out.WriteLine("CurrentNode: [" + current.X + "," + current.Y + "]");
 
 				Node currentNode = bottomLeft[current.Y, current.X];
 				//Node currentNode = bottomLeft[currentY, currentX];
@@ -245,7 +246,7 @@ namespace PG4500_2015_Innlevering2
 					//We arrived!
 					return true;
 				}
-                //Out.WriteLine("Stop Point 2 (inside whileLoop)");
+				//Out.WriteLine("Stop Point 2 (inside whileLoop)");
 				//Set current node as a visited node.
 				currentNode.Visited = true;
 
@@ -253,7 +254,7 @@ namespace PG4500_2015_Innlevering2
 				//find neighboring nodes
 				List<Vector2> neighbours = new List<Vector2>();
 				//List<int> neighbours = new List<int>();
-                //Out.WriteLine("Stop Point 3 (inside whileLoop)");
+				//Out.WriteLine("Stop Point 3 (inside whileLoop)");
 				if (current.X > 0)
 				//if (currentX > 0)
 				{
@@ -303,7 +304,7 @@ namespace PG4500_2015_Innlevering2
 				}
 
 				if (current.Y < mapHeight)
-					//if (currentY < bottomLeft.GetLength(0))
+				//if (currentY < bottomLeft.GetLength(0))
 				{
 					neighbours.Add(new Vector2(current.X, current.Y + 1));
 					//neighbours.Add(currentY + 1);
@@ -317,56 +318,56 @@ namespace PG4500_2015_Innlevering2
 					//neighbours.Add(currentY - 1);
 					//neighbours.Add(currentX);
 				}
-                //Out.WriteLine("Stop Point 4 (inside whileLoop)");
+				//Out.WriteLine("Stop Point 4 (inside whileLoop)");
 				//remove all visited nodes.
 				for (int i = 0; i < neighbours.Count; i++)
 				//for (int i = 0; i < neighbours.Count; i += 2)
 				{
-                    //Out.WriteLine("Stop Point 1 - Inside NeighborCheck");
+					//Out.WriteLine("Stop Point 1 - Inside NeighborCheck");
 					if (bottomLeft[neighbours[i].Y, neighbours[i].X].Visited)
 					//if (bottomLeft[neighbours[i], neighbours[i + 1]].Visited)
 					{
-                        //Out.WriteLine("Stop Point 2 - Inside NeighborCheck");
+						//Out.WriteLine("Stop Point 2 - Inside NeighborCheck");
 						neighbours.RemoveAt(i);
 						//neighbours.RemoveAt(i);
 						//neighbours.RemoveAt(i);
 						i--;
 						//i -= 2;
-                      //  Out.WriteLine("Stop Point 3 - Inside NeighborCheck");
+						//  Out.WriteLine("Stop Point 3 - Inside NeighborCheck");
 						continue;
 						//continue;
 					}
-                   // Out.WriteLine("Stop Point 4 - Inside NeighborCheck"); //<- Crashes here after several iterations
+					// Out.WriteLine("Stop Point 4 - Inside NeighborCheck"); //<- Crashes here after several iterations
 					if (!bottomLeft[neighbours[i].Y, neighbours[i].X].Walkable)
 					//if (!bottomLeft[neighbours[i], neighbours[i + 1]].Walkable)
 					{
-                       // Out.WriteLine("Stop Point 5 - Inside NeighborCheck");
+						// Out.WriteLine("Stop Point 5 - Inside NeighborCheck");
 						//neighbours.RemoveAt(i);
 						//neighbours.RemoveAt(i);
 						neighbours.RemoveAt(i);
 						i--;
 						//i -= 2;
-                       // Out.WriteLine("Stop Point 6 - Inside NeighborCheck");
+						// Out.WriteLine("Stop Point 6 - Inside NeighborCheck");
 					}
 				}
 				//TODO remove this crap
 				//for (int i = 0; i < neighbours.Count; i += 2)
 				//{
-					//Node test = bottomLeft[neighbours[i], neighbours[i + 1]];
-					//Out.WriteLine("If this throws errors, neighbour check is wrong.");
+				//Node test = bottomLeft[neighbours[i], neighbours[i + 1]];
+				//Out.WriteLine("If this throws errors, neighbour check is wrong.");
 				//}
 				#endregion
 
 				#region Calculate distance
-               // Out.WriteLine("Stop Point 5 (inside whileLoop)");
+				// Out.WriteLine("Stop Point 5 (inside whileLoop)");
 				//calculate distance by A* method
 				for (int i = 0; i < neighbours.Count; i++)
 					foreach (Vector2 neighbourCoord in neighbours)
-				{
-				Node neighbour = bottomLeft[neighbours[i].Y,neighbours[i].X];
-				neighbour.GScore = currentNode.GScore + neighbour.Cost;
-				neighbour.HScore = CalculateHScore(neighbourCoord,target);
-				}
+					{
+						Node neighbour = bottomLeft[neighbours[i].Y, neighbours[i].X];
+						neighbour.GScore = currentNode.GScore + neighbour.Cost;
+						neighbour.HScore = CalculateHScore(neighbourCoord, target);
+					}
 				//for (int i = 0; i < neighbours.Count; i += 2)
 				//{
 				//	Node neighbour = bottomLeft[neighbours[i].Y, neighbours[i].X];
@@ -374,34 +375,35 @@ namespace PG4500_2015_Innlevering2
 				//	neighbour.HScore = CalculateHScore(neighbours[i + 1], neighbours[i], targetX, targetY);
 				//}
 				#endregion
-               // Out.WriteLine("Stop Point 6 (inside whileLoop)");
+				// Out.WriteLine("Stop Point 6 (inside whileLoop)");
 				#region Sort nodes
 				//sort nodes by FCost.
 				//queuedNodes.AddRange(neighbours);
 				queuedNodes.AddRange(neighbours);
-               // Out.WriteLine("Stop Point 6a (inside whileLoop)");
+				// Out.WriteLine("Stop Point 6a (inside whileLoop)");
 				sortNodes(queuedNodes, bottomLeft);
-                //Out.WriteLine("Stop Point 6b (inside whileLoop)");
+				//Out.WriteLine("Stop Point 6b (inside whileLoop)");
 				#endregion
-                //Out.WriteLine("Stop Point 7 (inside whileLoop)");
+				//Out.WriteLine("Stop Point 7 (inside whileLoop)");
 				//remove duplicates
 				for (int i = 0; i < queuedNodes.Count - 1; i++)
 				//for (int i = 0; i < queuedNodes.Count - 2; i += 2)
 				{
 					for (int j = i + 1; j < queuedNodes.Count; j++)
 						if (queuedNodes[i] == queuedNodes[j])
-					//if (queuedNodes[i] == queuedNodes[i + 2] && queuedNodes[i + 1] == queuedNodes[i + 3])
-					{
-						//queuedNodes.RemoveAt(i);
-						//queuedNodes.RemoveAt(i);
-						queuedNodes.RemoveAt(i);
-						i--;
-						//i -= 2;
-					}
+						//if (queuedNodes[i] == queuedNodes[i + 2] && queuedNodes[i + 1] == queuedNodes[i + 3])
+						{
+							//queuedNodes.RemoveAt(i);
+							//queuedNodes.RemoveAt(i);
+							queuedNodes.RemoveAt(i);
+							i--;
+							//i -= 2;
+						}
 				}
+				Current = current;
 				//CurrentX = currentX;
 				//CurrentY = currentY;
-               // Out.WriteLine("Stop Point 8 (inside whileLoop)");
+				// Out.WriteLine("Stop Point 8 (inside whileLoop)");
 			}
 			return false;
 		}
@@ -422,13 +424,13 @@ namespace PG4500_2015_Innlevering2
 			{
 				//Out.WriteLine("The list isn't even. What the fuck?");
 			}
-          //  Out.WriteLine("Stop Point 1 (inside SortNode())");
-			for (int i = 0; i < list.Count - 1; i--) 
+			//  Out.WriteLine("Stop Point 1 (inside SortNode())");
+			for (int i = 0; i < list.Count - 1; i--)
 			//for (int i = 0; i < list.Count - 2; i += 2)
 			{
 				//   Out.WriteLine("Stop Point 2 (inside SortNode())");
 				Node n1 = map[list[i].Y, list[i].X];
-				Node n2 = map[list[i+1].Y, list[i+1].X];
+				Node n2 = map[list[i + 1].Y, list[i + 1].X];
 				//  Out.WriteLine("Stop Point 3 (inside SortNode())");
 				//preliminarily a primitive bubble sort.
 				if (n1.FScore > n2.FScore)
@@ -445,25 +447,25 @@ namespace PG4500_2015_Innlevering2
 			}
 		}
 
-       
 
-        public override void OnPaint(IGraphics graphics)
-        {
-            graphics.FillRectangle(Brushes.Red, CurrentX * 50, CurrentY * 50, 50, 50);
-            if (paintPath)
-        {
-            
-                for (int i = 0; i <= queuedNodes.Count / 2; i++)
-                {
 
-                }
-        }
+		public override void OnPaint(IGraphics graphics)
+		{
+			graphics.FillRectangle(Brushes.Red, Current.X * 50, Current.Y * 50, 50, 50);
+			if (paintPath)
+			{
 
-        }
+				for (int i = 0; i <= queuedNodes.Count / 2; i++)
+				{
+
+				}
+			}
+
+		}
 
 		public void ReadPath(int currentX, int currentY)
 		{
-			
+
 		}
 
 		public int ReadPathX(int pathLocation)
