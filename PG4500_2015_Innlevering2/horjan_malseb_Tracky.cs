@@ -299,7 +299,6 @@ namespace PG4500_2015_Innlevering2
 						neighbour.GScore = currentNode.GScore + neighbour.Cost;
 						neighbour.Parent = current;
 					}
-					//neighbour.GScore = currentNode.GScore + neighbour.Cost;
 					neighbour.HScore = CalculateHScore(neighbourCoord, target);
 					//}
 				}
