@@ -296,9 +296,12 @@ namespace PG4500_2015_Innlevering2
 				//preliminarily a primitive bubble sort.
 				if (n1.FScore > n2.FScore)
 				{
-					int temp = map[i, i + 1];
-					map[i, i + 1] = map[i + 2, i + 3];
-					map[i + 2, i + 3] = temp;
+					int temp = list[i];
+					list[i] = list[i + 2];
+					list[i + 2] = temp;
+					temp = list[i + 1];
+					list[i + 1] = list[i + 3];
+					list[i + 3] = temp;
 				}
 			}
 		}
