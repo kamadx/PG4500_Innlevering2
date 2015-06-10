@@ -14,6 +14,7 @@ namespace roboUtil
 		private bool _visited;
 		private double _gScore;
 		private double _hScore;
+		private Node _parent;
 
 		public bool Walkable { get { return _walkable; } set { _walkable = value; } }
 		public int Cost { get { return _cost; } set { _cost = value; } }
@@ -21,6 +22,7 @@ namespace roboUtil
 		public bool Visited { get { return _visited; } set { _visited = value; } }
 		public double GScore { get { return _gScore; } set { _gScore = value; } }
 		public double HScore { get { return _hScore; } set { _hScore = value; } }
+		public Node Parent { get { return _parent; } set { _parent = value; } }
 		//returns a calculated value, but I hold that the value is simple enough to be considered a property.
 		public double FScore { get { return HScore + GScore; } }
 
@@ -37,6 +39,7 @@ namespace roboUtil
 			Visited = false;
 			GScore = 0;
 			HScore = 0;
+			_parent = null;
 		}
 
 		//Shorthand-functions for easy compatibility with initial map received.
