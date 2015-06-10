@@ -8,7 +8,7 @@ using roboUtil;
 
 namespace PG4500_2015_Innlevering2
 {
-	public class horjan_malseb_Megaman : AdvancedRobot
+	public class horjan_malseb_Tracky : AdvancedRobot
 	{
 		/*
 		 TODO: Find target <- Done 
@@ -126,8 +126,7 @@ namespace PG4500_2015_Innlevering2
 			Node[,] bottomLeft = (Node[,])collisionMap.Clone();
 			for (int y = collisionMap.GetLength(0), y2 = 0; y >= 0; y--)
 			{
-                Out.WriteLine("Stop Point 1a");
-				for (int x = 0; x <= collisionMap.GetLength(1); y++)
+				for (int x = 0; x <= collisionMap.GetLength(1); x++)
 				{
                     Out.WriteLine("Stop Point 1b");
 					bottomLeft[y2, x] = collisionMap[y, x];
