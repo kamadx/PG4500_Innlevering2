@@ -8,7 +8,7 @@ using roboUtil;
 
 namespace PG4500_2015_Innlevering2
 {
-	public class horjan_malseb_Megaman : AdvancedRobot
+	public class horjan_malseb_Tracky : AdvancedRobot
 	{
 		/*
 		 TODO: Find target <- Done 
