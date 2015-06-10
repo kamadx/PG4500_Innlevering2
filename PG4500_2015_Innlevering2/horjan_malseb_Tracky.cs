@@ -385,7 +385,7 @@ namespace PG4500_2015_Innlevering2
 
 		public void ReadPath(int currentX, int currentY)
 		{
-			GoToPoint(nodeX, nodeY);
+			
 		}
 
 		public int ReadPathX(int pathLocation)
