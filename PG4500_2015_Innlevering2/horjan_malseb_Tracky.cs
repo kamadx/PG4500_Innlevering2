@@ -237,23 +237,28 @@ namespace PG4500_2015_Innlevering2
 				//remove all visited nodes.
 				for (int i = 0; i < neighbours.Count; i += 2)
 				{
-					if (bottomLeft[i, i + 1].Visited)
+					if (bottomLeft[neighbours[i], neighbours[i + 1]].Visited)
 					{
 						neighbours.RemoveAt(i);
 						neighbours.RemoveAt(i);
 						i -= 2;
 					}
-					if (!bottomLeft[i, i + 1].Walkable)
+					if (!bottomLeft[neighbours[i], neighbours[i + 1]].Walkable)
 					{
 						neighbours.RemoveAt(i);
 						neighbours.RemoveAt(i);
 						i -= 2;
 					}
 				}
+				for (int i = 0; i < neighbours.Count; i += 2)
+				{
+					Node test = bottomLeft[neighbours[i], neighbours[i + 1]];
+					Out.WriteLine("If this throws errors, neighbour check is wrong.");
+				}
 				#endregion
 
-				#region Calculate distance
-                Out.WriteLine("Stop Point 5 (inside whileLoop)");
+					#region Calculate distance
+					Out.WriteLine("Stop Point 5 (inside whileLoop)");
 				//calculate distance by A* method
 				for (int i = 0; i < neighbours.Count; i += 2)
 				{
