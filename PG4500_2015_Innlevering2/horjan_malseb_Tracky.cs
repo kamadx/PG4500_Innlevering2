@@ -509,7 +509,7 @@ namespace PG4500_2015_Innlevering2
 				//Set current node as a visited node.
 				currentNode.Visited = true;
 
-				#region check neighbours
+				#region Check neighbours
 				//find neighboring nodes
 				List<int> neighbours = new List<int>();
 
@@ -579,7 +579,7 @@ namespace PG4500_2015_Innlevering2
 				}
 				#endregion
 
-                #region Distance
+                #region Calculate distance
                 //H Cost - Diagonal Distance
 				//currentNode.HScore = CalculateHScore(currentX, currentY, targetX, targetY);
 
@@ -592,8 +592,11 @@ namespace PG4500_2015_Innlevering2
 				}
 				#endregion
 
+				#region Sort nodes
 				//sort nodes by FCost.
-				
+				queuedNodes.AddRange(neighbours);
+				sortNodes(queuedNodes, bottomLeft);
+				#endregion
 			}
 			return false;
 			#region PSEUDO
@@ -655,6 +658,22 @@ namespace PG4500_2015_Innlevering2
 			double diagCost = 1.414;
 			double hScore = diagCost * dMin + nonDiagCost * (dMax - dMin);
 			return hScore;
+		}
+
+		private void sortNodes(List<int> list, Node[,] map)
+		{
+			for (int i = 0; i < list.Count-2; i += 2)
+			{
+				Node n1 = map[i,i+1];
+				Node n2 = map[i+2,i+3];
+				//preliminarily a primitive bubble sort.
+				if (n1.FScore > n2.FScore)
+				{
+					int temp = map[i, i + 1];
+					map[i, i + 1] = map[i + 2, i + 3];
+					map[i + 2, i + 3] = temp;
+				}
+			}
 		}
 
 		public void ReadPath(int currentX, int currentY)
