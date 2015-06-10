@@ -250,8 +250,9 @@ namespace PG4500_2015_Innlevering2
 						i -= 2;
 					}
 				}
-				foreach (Node neighbour in neighbours)
+				for (int i = 0; i < neighbours.Count; i += 2)
 				{
+					Node testNode = bottomLeft[i, i + 1];
 					Out.WriteLine("node exists. If this throws errors neighbour check is wrong.");
 				}
 				#endregion
