@@ -237,17 +237,23 @@ namespace PG4500_2015_Innlevering2
 				//remove all visited nodes.
 				for (int i = 0; i < neighbours.Count; i += 2)
 				{
+                    Out.WriteLine("Stop Point 1 - Inside NeighborCheck");
 					if (bottomLeft[neighbours[i], neighbours[i + 1]].Visited)
 					{
+                        Out.WriteLine("Stop Point 2 - Inside NeighborCheck");
 						neighbours.RemoveAt(i);
 						neighbours.RemoveAt(i);
 						i -= 2;
+                        Out.WriteLine("Stop Point 3 - Inside NeighborCheck");
 					}
+                    Out.WriteLine("Stop Point 4 - Inside NeighborCheck"); //<- Crashes here after several iterations
 					if (!bottomLeft[neighbours[i], neighbours[i + 1]].Walkable)
 					{
+                        Out.WriteLine("Stop Point 5 - Inside NeighborCheck");
 						neighbours.RemoveAt(i);
 						neighbours.RemoveAt(i);
 						i -= 2;
+                        Out.WriteLine("Stop Point 6 - Inside NeighborCheck");
 					}
 				}
 				for (int i = 0; i < neighbours.Count; i += 2)
@@ -257,8 +263,8 @@ namespace PG4500_2015_Innlevering2
 				}
 				#endregion
 
-					#region Calculate distance
-					Out.WriteLine("Stop Point 5 (inside whileLoop)");
+				#region Calculate distance
+                Out.WriteLine("Stop Point 5 (inside whileLoop)");
 				//calculate distance by A* method
 				for (int i = 0; i < neighbours.Count; i += 2)
 				{
