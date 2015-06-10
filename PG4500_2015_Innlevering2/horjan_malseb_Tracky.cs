@@ -307,7 +307,7 @@ namespace PG4500_2015_Innlevering2
 				Out.WriteLine("The list isn't even. What the fuck?");
 			}
             Out.WriteLine("Stop Point 1 (inside SortNode())");
-			for (int i = 0; i < list.Count - 2; i += 2)
+			for (int i = 0; i < list.Count - 3; i += 2)
 			{
                 Out.WriteLine("Stop Point 2 (inside SortNode())");
 				Node n1 = map[i, i + 1];
