@@ -7,7 +7,7 @@ using System.Collections;
 
 namespace PG4500_2015_Innlevering2
 {
-	public class horjan_malseb_Tracky : AdvancedRobot
+	public class horjan_malseb_Megaman : AdvancedRobot
 	{
 		/*
 		 TODO: Find target <- Done 
@@ -62,10 +62,6 @@ namespace PG4500_2015_Innlevering2
 		//private int[,] uncheckedNodes = new int[mapWidth, mapHeight];
 		private List<int> queuedNodes = new List<int>();
 
-		private bool visited = false;
-		private int gScore, fScore;
-
-
 		//Path Queue for reading path
 		private Queue<int> pathQueue = new Queue<int>();
 
@@ -74,7 +70,6 @@ namespace PG4500_2015_Innlevering2
 		//Point to go to.
 		private int nodeX, nodeY;
 		private const int tilesize = 50;
-		private const int walkable = 0, unwalkable = 1;
 		private const int mapWidth = 16, mapHeight = 12;
 		// private const int found = 1, nonexistent = 2;
 		private bool enemyStopped;
@@ -465,8 +460,6 @@ namespace PG4500_2015_Innlevering2
 				}
 				y2++;
 			}
-			gScore = 0;
-			fScore = 0;
 
 			//Set every Node to not visited.
 			foreach (Node n in bottomLeft)
