@@ -118,7 +118,7 @@ namespace PG4500_2015_Innlevering2
 
 		public bool FindPath(int startX, int startY, int targetX, int targetY)
 		{
-
+            Out.WriteLine("Stop Point 1");
             //Empty the queue to avoid errors.
             queuedNodes.Clear();
 
@@ -126,19 +126,23 @@ namespace PG4500_2015_Innlevering2
 			Node[,] bottomLeft = (Node[,])collisionMap.Clone();
 			for (int y = collisionMap.GetLength(0), y2 = 0; y >= 0; y--)
 			{
+                Out.WriteLine("Stop Point 1a");
 				for (int x = 0; x <= collisionMap.GetLength(1); y++)
 				{
+                    Out.WriteLine("Stop Point 1b");
 					bottomLeft[y2, x] = collisionMap[y, x];
+                    Out.WriteLine("Stop Point 1c");
 				}
 				y2++;
+                Out.WriteLine("Stop Point 1d");
 			}
-
+            Out.WriteLine("Stop Point 2");
 			//Set every Node to not visited.
 			foreach (Node n in bottomLeft)
 			{
 				n.Init();
 			}
-
+            Out.WriteLine("Stop Point 3");
 			targetX /= tilesize;
 			targetY /= tilesize;
 			startX /= tilesize;
@@ -149,7 +153,7 @@ namespace PG4500_2015_Innlevering2
 
 			Out.WriteLine("Start:[" + (startX + 1) + "," + (startY + 1) + "]");
 			Out.WriteLine("Target:[" + (targetX + 1) + "," + (targetY + 1) + "]");
-
+            Out.WriteLine("Stop Point 1");
 
 			startNode.Visited = true;
 			startNode.GScore = startNode.Cost;
@@ -157,9 +161,10 @@ namespace PG4500_2015_Innlevering2
 
 			queuedNodes.Add(startY);
 			queuedNodes.Add(startX);
-
+            Out.WriteLine("Stop Point 4");
 			while (queuedNodes.Count > 0)
 			{
+                Out.WriteLine("Stop Point 1 (inside whileLoop)");
 				//Acting sort of like a queue.
 				int currentY = queuedNodes[0];
 				int currentX = queuedNodes[1];
@@ -172,14 +177,14 @@ namespace PG4500_2015_Innlevering2
 					//We arrived!
 					return true;
 				}
-
+                Out.WriteLine("Stop Point 2 (inside whileLoop)");
 				//Set current node as a visited node.
 				currentNode.Visited = true;
 
 				#region Check neighbours
 				//find neighboring nodes
 				List<int> neighbours = new List<int>();
-
+                Out.WriteLine("Stop Point 3 (inside whileLoop)");
 				if (currentX > 0)
 				{
 					neighbours.Add(currentY);
@@ -227,7 +232,7 @@ namespace PG4500_2015_Innlevering2
 					neighbours.Add(currentY - 1);
 					neighbours.Add(currentX);
 				}
-
+                Out.WriteLine("Stop Point 4 (inside whileLoop)");
 				//remove all visited nodes.
 				for (int i = 0; i < neighbours.Count; i += 2)
 				{
@@ -245,7 +250,7 @@ namespace PG4500_2015_Innlevering2
 					}
 				}
 				#endregion
-
+                Out.WriteLine("Stop Point 5 (inside whileLoop)");
 				#region Calculate distance
 				//calculate distance by A* method
 				for (int i = 0; i < neighbours.Count; i += 2)
@@ -255,13 +260,13 @@ namespace PG4500_2015_Innlevering2
 					neighbour.HScore = CalculateHScore(neighbours[i + 1], neighbours[i], targetX, targetY);
 				}
 				#endregion
-
+                Out.WriteLine("Stop Point 6 (inside whileLoop)");
 				#region Sort nodes
 				//sort nodes by FCost.
 				queuedNodes.AddRange(neighbours);
 				sortNodes(queuedNodes, bottomLeft);
 				#endregion
-
+                Out.WriteLine("Stop Point 7 (inside whileLoop)");
 				//remove duplicates
 				for (int i = 0; i < queuedNodes.Count - 2; i += 2)
 				{
@@ -272,7 +277,7 @@ namespace PG4500_2015_Innlevering2
 						i -= 2;
 					}
 				}
-
+                Out.WriteLine("Stop Point 8 (inside whileLoop)");
 			}
 			return false;
 		}
