@@ -43,19 +43,15 @@ namespace PG4500_2015_Innlevering2
 
 
 		private List<Vector2> queuedNodes = new List<Vector2>();
-		//private List<int> queuedNodes = new List<int>();
 
-		//Path Queue for reading path
 		private Stack<Vector2> pathStack = new Stack<Vector2>();
 		List<Rectangle> pathRect = new List<Rectangle>();
 
 
-		//Point to go to.
 		private Vector2 node;
 		private Vector2 robotPosition;
 		private const int tilesize = 50;
 		private const int mapWidth = 16, mapHeight = 12;
-		// private const int found = 1, nonexistent = 2;
 		private bool enemyStopped;
 		private bool paintPath;
 		private bool pathDone;
@@ -95,7 +91,6 @@ namespace PG4500_2015_Innlevering2
 					{
 						paintPath = false;
 						DebugProperty["Headed to coord"] = "(" + node.X.ToString() + "," + node.Y.ToString() + ")";
-						// DebugProperty["Headed to tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
 						Out.WriteLine("Starting FindPath()");
 						FindPath(new Vector2((int)X, (int)Y), node);
 
@@ -109,7 +104,6 @@ namespace PG4500_2015_Innlevering2
 
 		//Instructs the robot to move to a specific place.
 		private void GoToPoint(Vector2 point)
-		//public void GoToPoint(double pointX, double pointY, bool startPoint)
 		{
 			pathDone = false;
 			point -= robotPosition;
@@ -134,8 +128,6 @@ namespace PG4500_2015_Innlevering2
 
 		private bool FindPath(Vector2 start, Vector2 target)
 		{
-			//pathDone = false;
-			//Out.WriteLine("Stop Point 1");
 			//Empty the queue to avoid errors.
 			queuedNodes.Clear();
 
@@ -269,6 +261,7 @@ namespace PG4500_2015_Innlevering2
 				queuedNodes.AddRange(neighbours);
 				sortNodes(queuedNodes, bottomLeft);
 				#endregion
+
 				//remove duplicates
 				for (int i = 0; i < queuedNodes.Count - 1; i++)
 				{
@@ -281,14 +274,12 @@ namespace PG4500_2015_Innlevering2
 						}
 					}
 				}
-				//Scan();
 			}
 			return false;
 		}
 		private void makePath(Vector2 start, Vector2 target, Node[,] map)
 		{
 			pathRect.Clear();
-			//Stack<Vector2> path = new Stack<Vector2>();
 			pathStack.Push(target);
 			while (map[target.Y, target.X].Parent != start)
 			{
