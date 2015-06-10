@@ -265,7 +265,9 @@ namespace PG4500_2015_Innlevering2
 				#region Sort nodes
 				//sort nodes by FCost.
 				queuedNodes.AddRange(neighbours);
+                Out.WriteLine("Stop Point 6a (inside whileLoop)");
 				sortNodes(queuedNodes, bottomLeft);
+                Out.WriteLine("Stop Point 6b (inside whileLoop)");
 				#endregion
                 Out.WriteLine("Stop Point 7 (inside whileLoop)");
 				//remove duplicates
@@ -295,19 +297,24 @@ namespace PG4500_2015_Innlevering2
 
 		private void sortNodes(List<int> list, Node[,] map)
 		{
+            Out.WriteLine("Stop Point 1 (inside SortNode())");
 			for (int i = 0; i < list.Count - 2; i += 2)
 			{
+                Out.WriteLine("Stop Point 2 (inside SortNode())");
 				Node n1 = map[i, i + 1];
 				Node n2 = map[i + 2, i + 3];
+                Out.WriteLine("Stop Point 3 (inside SortNode())");
 				//preliminarily a primitive bubble sort.
 				if (n1.FScore > n2.FScore)
 				{
+                    Out.WriteLine("Stop Point 4 (inside SortNode())");
 					int temp = list[i];
 					list[i] = list[i + 2];
 					list[i + 2] = temp;
 					temp = list[i + 1];
 					list[i + 1] = list[i + 3];
 					list[i + 3] = temp;
+                    Out.WriteLine("Stop Point 5 (inside SortNode())");
 				}
 			}
 		}
