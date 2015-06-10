@@ -55,17 +55,15 @@ namespace PG4500_2015_Innlevering2
 		private const int mapWidth = 16, mapHeight = 12;
 		private readonly Vector2 centerOfTile = new Vector2(25, 25);
 		private bool enemyStopped;
-		private bool paintPath;
+		//private bool paintPath;
 		private bool pathDone;
-
-
-
+        //private bool moveCompleted;
 
 		public override void Run()
 		{
 			pathDone = false;
 			IsAdjustGunForRobotTurn = true;
-			paintPath = false;
+			//paintPath = false;
 			SetColors(Color.LightBlue, Color.Blue, Color.Tan, Color.Yellow, Color.Tan);
 			enemyStopped = false;
 			node = new Vector2(0, 0);
@@ -77,26 +75,20 @@ namespace PG4500_2015_Innlevering2
 			pathDone = true;
 			Out.WriteLine("#{0}\t{1}", Time, "Arrived at (" + X.ToString() + "," + Y.ToString() + ").");
 
-
-
 			SetTurnRadarRightRadians(Double.PositiveInfinity);
 			Execute();
 			//Main Loop
 			while (true)
 			{
-
 				if (Velocity == 0)
 				{
 					if (enemyStopped && pathDone == true)
 					{
-						paintPath = false;
+						//paintPath = false;
 						DebugProperty["Headed to coord"] = "(" + node.X.ToString() + "," + node.Y.ToString() + ")";
 						Out.WriteLine("Starting FindPath()");
 						FindPath(new Vector2((int)X, (int)Y), node);
-
-
 					}
-
 				}
 				Scan();
 			}
@@ -126,13 +118,12 @@ namespace PG4500_2015_Innlevering2
 			SetAhead(distance * (angle == turnAngle ? 1 : -1));
 			Execute();
 
-			if (X == point.X && Y == point.Y)
-			{
-				pathDone = true;
-			}
-
-
-
+            if (X == point.X && Y == point.Y)
+            {
+                //Different testing of stuff
+                pathDone = true;
+                //moveCompleted = true;
+            }
 		}
 
 		/// <summary>
@@ -309,10 +300,8 @@ namespace PG4500_2015_Innlevering2
 				pathRect.Add(new Rectangle(target.X, target.Y, 50, 50));
 				pathStack.Push(target);
 			}
-			paintPath = true;
+			//paintPath = true;
 			ReadPath();
-
-
 		}
 
 		/// <summary>
@@ -347,9 +336,8 @@ namespace PG4500_2015_Innlevering2
 			}
 		}
 
-
-		//THIS SHIT AINT WORKING >:[
-		//@Kamad language.
+        //We had some major problems using OnPaint()
+        //More explained in the documentation.
 
 		//public override void OnPaint(IGraphics graphics)
 		//{
@@ -373,9 +361,9 @@ namespace PG4500_2015_Innlevering2
 			Vector2 temp;
 			while (pathStack.Count > 0)
 			{
-				temp = pathStack.Pop();
-				GoToPoint(temp);
-				Out.WriteLine("Next Point: [" + temp.X + "," + temp.Y + "]");
+                    temp = pathStack.Pop();
+                    GoToPoint(temp);
+                    Out.WriteLine("Next Point: [" + temp.X + "," + temp.Y + "]");   
 			}
 			pathDone = true;
 
