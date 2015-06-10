@@ -138,7 +138,7 @@ namespace PG4500_2015_Innlevering2
                 WaitFor(new TurnCompleteCondition(this));
                 
             }
-
+                
             if (X == pointX && Y == pointY)
             {
                 pathDone = true;
@@ -189,7 +189,7 @@ namespace PG4500_2015_Innlevering2
             Out.WriteLine("Stop Point 1");
 
 			startNode.Visited = true;
-			startNode.GScore = startNode.Cost;
+			startNode.GScore = 0;
 			startNode.HScore = CalculateHScore(startX, startY, targetX, targetY);
 
 			queuedNodes.Add(startY);
@@ -198,17 +198,15 @@ namespace PG4500_2015_Innlevering2
 			while (queuedNodes.Count > 0)
 			{
                 Out.WriteLine("Stop Point 1 (inside whileLoop)");
-                Out.WriteLine("Stop Point 1aaaa");
 				//Acting sort of like a queue.
 				int currentY = queuedNodes[0];
 				int currentX = queuedNodes[1];
 				queuedNodes.RemoveAt(0);
 				queuedNodes.RemoveAt(0);
-                Out.WriteLine("Stop Point 1bbbb");
+
 				Node currentNode = bottomLeft[currentY, currentX];
 				if (currentNode == targetNode)
 				{
-                    Out.WriteLine("WE DID IT!");
 					//We arrived!
 					return true;
 				}
@@ -278,8 +276,8 @@ namespace PG4500_2015_Innlevering2
 						neighbours.RemoveAt(i);
 						neighbours.RemoveAt(i);
 						i -= 2;
-						continue;
                         Out.WriteLine("Stop Point 3 - Inside NeighborCheck");
+						continue;
 					}
                     Out.WriteLine("Stop Point 4 - Inside NeighborCheck"); //<- Crashes here after several iterations
 					if (!bottomLeft[neighbours[i], neighbours[i + 1]].Walkable)
@@ -387,7 +385,7 @@ namespace PG4500_2015_Innlevering2
 
 		public void ReadPath(int currentX, int currentY)
 		{
-			
+			GoToPoint(nodeX, nodeY);
 		}
 
 		public int ReadPathX(int pathLocation)
