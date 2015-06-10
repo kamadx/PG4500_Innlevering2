@@ -9,8 +9,8 @@ namespace PG4500_2015_Innlevering2
 {
 	public class horjan_malseb_Tracky : AdvancedRobot
 	{
-		/*
-		 * Early pseudocode/checklist, abandoned. Kept for posterity.
+		/* Early pseudocode/checklist, abandoned. Kept for posterity.
+		 *
 		 * 
 		 TODO: Find target <- Done 
 		 TODO: DEBUG: Just go target, then wait for new target. Repeat. <- Done
@@ -57,7 +57,7 @@ namespace PG4500_2015_Innlevering2
 		private bool enemyStopped;
 		//private bool paintPath;
 		private bool pathDone;
-        //private bool moveCompleted;
+		//private bool moveCompleted;
 
 		public override void Run()
 		{
@@ -118,12 +118,12 @@ namespace PG4500_2015_Innlevering2
 			SetAhead(distance * (angle == turnAngle ? 1 : -1));
 			Execute();
 
-            if (X == point.X && Y == point.Y)
-            {
-                //Different testing of stuff
-                pathDone = true;
-                //moveCompleted = true;
-            }
+			if (X == point.X && Y == point.Y)
+			{
+				//Different testing of stuff
+				pathDone = true;
+				//moveCompleted = true;
+			}
 		}
 
 		/// <summary>
@@ -319,6 +319,7 @@ namespace PG4500_2015_Innlevering2
 			double hScore = diagCost * dMin + nonDiagCost * (dMax - dMin);
 			return hScore;
 		}
+
 		private void sortNodes(List<Vector2> list, Node[,] map)
 		{
 			for (int i = 0; i < list.Count - 1; i++)
@@ -336,8 +337,8 @@ namespace PG4500_2015_Innlevering2
 			}
 		}
 
-        //We had some major problems using OnPaint()
-        //More explained in the documentation.
+		//We had some major problems using OnPaint()
+		//More explained in the documentation.
 
 		//public override void OnPaint(IGraphics graphics)
 		//{
@@ -361,9 +362,9 @@ namespace PG4500_2015_Innlevering2
 			Vector2 temp;
 			while (pathStack.Count > 0)
 			{
-                    temp = pathStack.Pop();
-                    GoToPoint(temp);
-                    Out.WriteLine("Next Point: [" + temp.X + "," + temp.Y + "]");   
+				temp = pathStack.Pop();
+				GoToPoint(temp);
+				Out.WriteLine("Next Point: [" + temp.X + "," + temp.Y + "]");
 			}
 			pathDone = true;
 
