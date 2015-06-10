@@ -127,6 +127,7 @@ namespace PG4500_2015_Innlevering2
 			int y2 = 0;
 			for (int y = collisionMap.GetLength(0)-1; y >= 0; y--)
 			{
+                Out.WriteLine("Stop Point 1a");
 				for (int x = 0; x < collisionMap.GetLength(1); x++)
 				{
                     Out.WriteLine("Stop Point 1b");
