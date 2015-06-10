@@ -55,11 +55,13 @@ namespace PG4500_2015_Innlevering2
 		private const int mapWidth = 16, mapHeight = 12;
 		// private const int found = 1, nonexistent = 2;
 		private bool enemyStopped;
+        private bool pathDone;
 
 		private RobotStatus robotStatus;
 
 		public override void Run()
 		{
+            pathDone = false;
             SetColors(Color.LightBlue, Color.Blue, Color.Tan, Color.Yellow, Color.Tan);
 			enemyStopped = false;
 			//Startup - Go to (25, 25) and wait.
@@ -69,6 +71,7 @@ namespace PG4500_2015_Innlevering2
 			DebugProperty["Headed to Tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
 			GoToPoint(nodeX, nodeY, true);
 			WaitFor(new MoveCompleteCondition(this));
+            pathDone = true;
 			Out.WriteLine("#{0}\t{1}", Time, "Arrived at (" + X.ToString() + "," + Y.ToString() + ").");
 			//SetTurnRight(180);
 
@@ -82,7 +85,7 @@ namespace PG4500_2015_Innlevering2
 
 				if (Velocity == 0)
 				{
-					if (enemyStopped)
+					if (enemyStopped && pathDone)
 					{
 						DebugProperty["Headed to coord"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
 						// DebugProperty["Headed to tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
@@ -110,6 +113,7 @@ namespace PG4500_2015_Innlevering2
 		//Instructs the robot to move to a specific place.
 		public void GoToPoint(double pointX, double pointY, bool startPoint)
 		{
+            pathDone = false;
             Out.WriteLine("Next point: [" + pointX + " , " + pointY + "]");
 			
             //Go to point specified
@@ -129,7 +133,15 @@ namespace PG4500_2015_Innlevering2
             }
             else
             {
+                double angle = Util.NormalRelativeAngle(Math.Atan2((pointX*50), (pointY*50)) - HeadingRadians);
+                double turnAngle = Math.Atan(Math.Tan(angle));
+                WaitFor(new TurnCompleteCondition(this));
                 
+            }
+
+            if (X == pointX && Y == pointY)
+            {
+                pathDone = true;
             }
             
 
