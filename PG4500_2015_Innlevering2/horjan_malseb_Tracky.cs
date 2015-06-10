@@ -124,7 +124,8 @@ namespace PG4500_2015_Innlevering2
 
 			//Y-axis-reversed version of collisionMap to match coordinates of Robocode
 			Node[,] bottomLeft = (Node[,])collisionMap.Clone();
-			for (int y = collisionMap.GetLength(0), y2 = 0; y >= 0; y--)
+			int y2 = 0;
+			for (int y = collisionMap.GetLength(0); y >= 0; y--)
 			{
                 Out.WriteLine("Stop Point 1a");
 				for (int x = 0; x <= collisionMap.GetLength(1); x++)
