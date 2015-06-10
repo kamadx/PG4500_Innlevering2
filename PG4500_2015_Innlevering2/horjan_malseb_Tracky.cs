@@ -157,7 +157,7 @@ namespace PG4500_2015_Innlevering2
 			SetAhead(distance * (angle == turnAngle ? 1 : -1));
 			Execute();
 		}
-
+		#region transliterated c++
 		//    public int FindPath(int startingX, int startingY, int targetX, int targetY)
 		//    {
 		//        int onOpenList = 0, parentXval = 0, parentYval = 0, temp = 0, corner = 0, numberOfOpenListItems = 0,
@@ -419,11 +419,12 @@ namespace PG4500_2015_Innlevering2
 		//            }
 		//        return path;
 		//    }
+		#endregion
 
 		public bool FindPath(int startX, int startY, int targetX, int targetY)
 		{
 
-
+			#region old code
 			/*for (int j = 0; j < checkedNodes.GetLength(0); j++)
 			{
 			   for (int k = 0; k < checkedNodes.GetLength(1); k++)
@@ -444,24 +445,25 @@ namespace PG4500_2015_Innlevering2
 			 }
 			 //uʍop ǝpısdn pǝddıןɟ sı ʇıɥs sıɥʇ
 			 */
+			#endregion
 
-			//////////////////////////////////////////////////////////////////////////////////////
-			//Set every Node to not visited, i.e 0.
-
+			//Y-axis-reversed version of collisionMap to match coordinates of Robocode
 			Node[,] bottomLeft = (Node[,])collisionMap.Clone();
-			for (int y = collisionMap.GetLength(0); y >= 0; y--)
+			for (int y = collisionMap.GetLength(0), y2 = 0; y >= 0; y--)
 			{
 				for (int x = 0; x <= collisionMap.GetLength(1); y++)
 				{
-					bottomLeft[y, x] = collisionMap[y, x];
+					bottomLeft[y2, x] = collisionMap[y, x];
 				}
+				y2++;
 			}
             gScore = 0;
             fScore = 0;
 
-			foreach (Node n in collisionMap)
+			//Set every Node to not visited.
+			foreach (Node n in bottomLeft)
 			{
-				n.Visited = false;
+				n.Init();
 			}
 
 			targetX /= tilesize;
@@ -469,8 +471,8 @@ namespace PG4500_2015_Innlevering2
 			startX /= tilesize;
 			startY /= tilesize;
 
-			Node startNode = collisionMap[startY, startX];
-			Node targetNode = collisionMap[targetY, targetX];
+			Node startNode = bottomLeft[startY, startX];
+			Node targetNode = bottomLeft[targetY, targetX];
 
 			Out.WriteLine("Start:[" + (startX + 1) + "," + (startY + 1) + "]");
 			Out.WriteLine("Target:[" + (targetX + 1) + "," + (targetY + 1) + "]");
@@ -524,7 +526,7 @@ namespace PG4500_2015_Innlevering2
 						neighbours.Add(currentX - 1);
 					}
 				}
-
+				
 				if (currentX < bottomLeft.GetLength(1))
 				{
 					neighbours.Add(currentY);

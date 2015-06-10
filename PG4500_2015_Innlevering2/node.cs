@@ -12,33 +12,42 @@ namespace PG4500_2015_Innlevering2
 		private int _cost;
 		private int _sector;
 		private bool _visited;
+		private float _gScore;
+		private float _hScore;
 
 		public bool Walkable { get { return _walkable; } set { _walkable = value; } }
 		public int Cost { get { return _cost; } set { _cost = value; } }
 		public int Sector { get { return _sector; } set { _sector = value; } }
 		public bool Visited { get { return _visited; } set { _visited = value; } }
+		public float GScore { get { return _gScore; } set { _gScore = value; } }
+		public float HScore { get { return _hScore; } set { _hScore = value; } }
+		//returns a calculated value, but I hold that the value is simple enough to be considered a property.
+		public float FScore { get { return HScore + GScore; } }
 
-		public Node(bool walkable = false, int cost = 1, bool visited = false, int sector = 0)
+		public Node(bool walkable = false, int cost = 1, int sector = 0)
 		{
 			Walkable = walkable;
 			Cost = cost;
 			Sector = sector;
-			Visited = visited;
+			Init();
 		}
 
-		public static implicit operator bool(Node n)
+		public void Init()
 		{
-			return n.Walkable;
+			Visited = false;
+			GScore = 0;
+			HScore = 0;
 		}
 
-		//implementation specific methods
+		//Shorthand-functions for compatibility with initial map received.
 
-		//for printing the map back the way it's made.
+		//for printing the map back the way it was received.
 		public static implicit operator int(Node n)
 		{
-			return n.Walkable? 0: 1;
+			return n.Walkable ? 0 : 1;
 		}
 
+		//for parsing the map the way it was received.
 		public static implicit operator Node(int i)
 		{
 			return new Node(i == 0);
