@@ -58,6 +58,7 @@ namespace PG4500_2015_Innlevering2
 		// private const int found = 1, nonexistent = 2;
 		private bool enemyStopped;
 		private bool paintPath;
+        private bool pathDone;
 
 
 
@@ -65,6 +66,7 @@ namespace PG4500_2015_Innlevering2
 
 		public override void Run()
 		{
+            pathDone = false;
             IsAdjustGunForRobotTurn = true;
 			paintPath = false;
 			SetColors(Color.LightBlue, Color.Blue, Color.Tan, Color.Yellow, Color.Tan);
@@ -75,6 +77,7 @@ namespace PG4500_2015_Innlevering2
 			DebugProperty["Headed to Tile"] = "(" + node.X / tilesize + "," + node.Y / tilesize + ")";
 			GoToPoint(node, true);
 			WaitFor(new MoveCompleteCondition(this));
+            pathDone = true;
 			Out.WriteLine("#{0}\t{1}", Time, "Arrived at (" + X.ToString() + "," + Y.ToString() + ").");
 			//SetTurnRight(180);
 
@@ -88,7 +91,7 @@ namespace PG4500_2015_Innlevering2
 
 				if (Velocity == 0)
 				{
-					if (enemyStopped)
+					if (enemyStopped && pathDone == true)
 					{
                         paintPath = false;
 						DebugProperty["Headed to coord"] = "(" + node.X.ToString() + "," + node.Y.ToString() + ")";
@@ -108,6 +111,7 @@ namespace PG4500_2015_Innlevering2
 		private void GoToPoint(Vector2 point, bool startPoint)
 		//public void GoToPoint(double pointX, double pointY, bool startPoint)
 		{
+            pathDone = false;
 			//Out.WriteLine("Next point: [" + point.X + " , " + point.Y + "]");
 
 			//Go to point specified
@@ -128,6 +132,7 @@ namespace PG4500_2015_Innlevering2
 			{
 				double angle = Util.NormalRelativeAngle(Math.Atan2((point.X * 50), (point.Y * 50)) - HeadingRadians);
 				double turnAngle = Math.Atan(Math.Tan(angle));
+                SetTurnGunRightRadians(Util.NormalRelativeAngle(turnAngle));
 				WaitFor(new TurnCompleteCondition(this));
 
                 SetAhead(50f * (angle == turnAngle ? 1 : -1));
@@ -365,9 +370,10 @@ namespace PG4500_2015_Innlevering2
             while (pathStack.Count > 0)
             {
                 temp = pathStack.Pop();
-                GoToPoint(temp, false);
+                GoToPoint(temp, true);
                 Out.WriteLine("Next Point: [" + temp.X + "," + temp.Y + "]");
             }
+            pathDone = true;
             
 		}
 
