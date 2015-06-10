@@ -1,6 +1,7 @@
 ﻿using Robocode;
 using Util = Robocode.Util.Utils;
 using System;
+using System.Drawing;
 using System.Collections.Generic;
 using System.Collections;
 using roboUtil;
@@ -59,6 +60,7 @@ namespace PG4500_2015_Innlevering2
 
 		public override void Run()
 		{
+            SetColors(Color.LightBlue, Color.Blue, Color.Tan, Color.Yellow, Color.Tan);
 			enemyStopped = false;
 			//Startup - Go to (25, 25) and wait.
 			nodeX = 25;
@@ -87,7 +89,7 @@ namespace PG4500_2015_Innlevering2
 						Out.WriteLine("Starting FindPath()");
                         if (FindPath((int)(X), (int)(Y), nodeX, nodeY))
                         {
-                            //DrawPath();
+                            //ReadPath()
                         }
 						
 					}
@@ -303,9 +305,17 @@ namespace PG4500_2015_Innlevering2
 
         public void DrawPath()
         {
+            //queuedNodes[0] = y, [1] = x
+            
+
             /*
              Drawing path here
              */
+        }
+
+        public override void OnPaint(IGraphics graphics)
+        {
+            
         }
 
 		public void ReadPath(int currentX, int currentY)
