@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PG4500_2015_Innlevering2
+namespace roboUtil
 {
 	class Node
 	{
@@ -39,12 +39,12 @@ namespace PG4500_2015_Innlevering2
 			HScore = 0;
 		}
 
-		//Shorthand-functions for compatibility with initial map received.
+		//Shorthand-functions for easy compatibility with initial map received.
 
 		//for printing the map back the way it was received.
-		public static implicit operator int(Node n)
+		public static implicit operator string(Node n)
 		{
-			return n.Walkable ? 0 : 1;
+			return n.Walkable ? "0" : "1";
 		}
 
 		//for parsing the map the way it was received.
