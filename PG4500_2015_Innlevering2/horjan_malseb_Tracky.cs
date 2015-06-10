@@ -67,7 +67,7 @@ namespace PG4500_2015_Innlevering2
 			paintPath = false;
 			SetColors(Color.LightBlue, Color.Blue, Color.Tan, Color.Yellow, Color.Tan);
 			enemyStopped = false;
-			node = new Vector2(25, 25);
+			node = new Vector2(0, 0);
 			robotPosition = new Vector2((int)X, (int)Y);
 			DebugProperty["Headed to coord"] = "(" + node.X.ToString() + "," + node.Y.ToString() + ")";
 			DebugProperty["Headed to Tile"] = "(" + node.X / tilesize + "," + node.Y / tilesize + ")";
@@ -107,9 +107,11 @@ namespace PG4500_2015_Innlevering2
 		{
 			pathDone = false;
 			point -= robotPosition;
+            int pointX = ((point.X * 50) + 25);
+            int pointY = ((point.Y * 50) + 25);
 
-			double distance = Math.Sqrt(Math.Pow(point.X, 2) + Math.Pow(point.Y, 2));
-			double angle = Util.NormalRelativeAngle(Math.Atan2(point.X, point.Y) - HeadingRadians);
+			double distance = Math.Sqrt(Math.Pow(pointX, 2) + Math.Pow(pointY, 2));
+			double angle = Util.NormalRelativeAngle(Math.Atan2(pointX, pointY) - HeadingRadians);
 
 			double turnAngle = Math.Atan(Math.Tan(angle));
 			SetTurnRightRadians(turnAngle);
@@ -117,7 +119,7 @@ namespace PG4500_2015_Innlevering2
 			SetAhead(distance * (angle == turnAngle ? 1 : -1));
 			Execute();
 
-			if (X == point.X && Y == point.Y)
+			if (X == pointX && Y == pointY)
 			{
 				pathDone = true;
 			}
