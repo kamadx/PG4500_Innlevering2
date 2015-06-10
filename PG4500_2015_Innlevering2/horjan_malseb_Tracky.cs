@@ -67,7 +67,7 @@ namespace PG4500_2015_Innlevering2
 			nodeY = 25;
 			DebugProperty["Headed to coord"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
 			DebugProperty["Headed to Tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
-			GoToPoint(nodeX, nodeY, true);
+			GoToPoint(nodeX, nodeY);
 			WaitFor(new MoveCompleteCondition(this));
 			Out.WriteLine("#{0}\t{1}", Time, "Arrived at (" + X.ToString() + "," + Y.ToString() + ").");
 			//SetTurnRight(180);
@@ -89,15 +89,7 @@ namespace PG4500_2015_Innlevering2
 						Out.WriteLine("Starting FindPath()");
                         if (FindPath((int)(X), (int)(Y), nodeX, nodeY))
                         {
-                            int x = 0, y = 0;
-                            for (int i = 0; i <= queuedNodes.Count / 2; i++)
-                            {
-                                y = queuedNodes[0];
-                                queuedNodes.RemoveAt(0);
-                                x = queuedNodes[0];
-                                queuedNodes.RemoveAt(0);
-                                GoToPoint(x, y, false);
-                            }
+                            //ReadPath()
                         }
 						
 					}
@@ -108,32 +100,20 @@ namespace PG4500_2015_Innlevering2
 		}
 
 		//Instructs the robot to move to a specific place.
-		public void GoToPoint(double pointX, double pointY, bool startPoint)
+		public void GoToPoint(double pointX, double pointY)
 		{
-            Out.WriteLine("Next point: [" + pointX + " , " + pointY + "]");
-			
-            //Go to point specified
-            if (startPoint == true)
-            {
-                pointX -= X;
-                pointY -= Y;
+			//Go to point specified
+			pointX -= X;
+			pointY -= Y;
 
-                double distance = Math.Sqrt(Math.Pow(pointX, 2) + Math.Pow(pointY, 2));
-                double angle = Util.NormalRelativeAngle(Math.Atan2(pointX, pointY) - HeadingRadians);
+			double distance = Math.Sqrt(Math.Pow(pointX, 2) + Math.Pow(pointY, 2));
+			double angle = Util.NormalRelativeAngle(Math.Atan2(pointX, pointY) - HeadingRadians);
 
-                double turnAngle = Math.Atan(Math.Tan(angle));
-                SetTurnRightRadians(turnAngle);
-                WaitFor(new TurnCompleteCondition(this));
-                SetAhead(distance * (angle == turnAngle ? 1 : -1));
-                Execute();
-            }
-            else
-            {
-                
-            }
-            
-
-			
+			double turnAngle = Math.Atan(Math.Tan(angle));
+			SetTurnRightRadians(turnAngle);
+			WaitFor(new TurnCompleteCondition(this));
+			SetAhead(distance * (angle == turnAngle ? 1 : -1));
+			Execute();
 		}
 
 		public bool FindPath(int startX, int startY, int targetX, int targetY)
@@ -177,7 +157,7 @@ namespace PG4500_2015_Innlevering2
             Out.WriteLine("Stop Point 1");
 
 			startNode.Visited = true;
-			startNode.GScore = startNode.Cost;
+			startNode.GScore = 0;
 			startNode.HScore = CalculateHScore(startX, startY, targetX, targetY);
 
 			queuedNodes.Add(startY);
@@ -186,17 +166,15 @@ namespace PG4500_2015_Innlevering2
 			while (queuedNodes.Count > 0)
 			{
                 Out.WriteLine("Stop Point 1 (inside whileLoop)");
-                Out.WriteLine("Stop Point 1aaaa");
 				//Acting sort of like a queue.
 				int currentY = queuedNodes[0];
 				int currentX = queuedNodes[1];
 				queuedNodes.RemoveAt(0);
 				queuedNodes.RemoveAt(0);
-                Out.WriteLine("Stop Point 1bbbb");
+
 				Node currentNode = bottomLeft[currentY, currentX];
 				if (currentNode == targetNode)
 				{
-                    Out.WriteLine("WE DID IT!");
 					//We arrived!
 					return true;
 				}
@@ -266,8 +244,8 @@ namespace PG4500_2015_Innlevering2
 						neighbours.RemoveAt(i);
 						neighbours.RemoveAt(i);
 						i -= 2;
-						continue;
                         Out.WriteLine("Stop Point 3 - Inside NeighborCheck");
+						continue;
 					}
                     Out.WriteLine("Stop Point 4 - Inside NeighborCheck"); //<- Crashes here after several iterations
 					if (!bottomLeft[neighbours[i], neighbours[i + 1]].Walkable)
@@ -375,7 +353,7 @@ namespace PG4500_2015_Innlevering2
 
 		public void ReadPath(int currentX, int currentY)
 		{
-			
+			GoToPoint(nodeX, nodeY);
 		}
 
 		public int ReadPathX(int pathLocation)
