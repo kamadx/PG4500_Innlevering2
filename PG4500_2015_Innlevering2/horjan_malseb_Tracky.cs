@@ -63,7 +63,8 @@ namespace PG4500_2015_Innlevering2
 
 
         //DEBUG STUFF
-        private int CurrentX, CurrentY;
+		private Vector2 Current;
+		//private int CurrentX, CurrentY;
 
 
 		private RobotStatus robotStatus;
@@ -81,7 +82,7 @@ namespace PG4500_2015_Innlevering2
 			//nodeY = 25;
 			DebugProperty["Headed to coord"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
 			DebugProperty["Headed to Tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
-			GoToPoint(node.X,node.Y, true);
+			GoToPoint(node, true);
 			WaitFor(new MoveCompleteCondition(this));
             pathDone = true;
 			Out.WriteLine("#{0}\t{1}", Time, "Arrived at (" + X.ToString() + "," + Y.ToString() + ").");
@@ -102,7 +103,7 @@ namespace PG4500_2015_Innlevering2
 						DebugProperty["Headed to coord"] = "(" + node.X.ToString() + "," + node.Y.ToString() + ")";
 						// DebugProperty["Headed to tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
 						Out.WriteLine("Starting FindPath()");
-						if (FindPath(robotPosition, node))
+						if (FindPath(new Vector2((int)X, (int)Y), node))
 						//if (FindPath((int)(X), (int)(Y), nodeX, nodeY))
                         {
                             paintPath = true;
@@ -117,7 +118,7 @@ namespace PG4500_2015_Innlevering2
 								//queuedNodes.RemoveAt(0);
 								//x = queuedNodes[0];
 								//queuedNodes.RemoveAt(0);
-                                GoToPoint(x, y, false);
+								GoToPoint(position, false);
                             }
                         }
 						
@@ -129,21 +130,21 @@ namespace PG4500_2015_Innlevering2
 		}
 
 		//Instructs the robot to move to a specific place.
-		//public void GoToPoint(Vector2 point, bool startPoint)
-		public void GoToPoint(double pointX, double pointY, bool startPoint)
+		private void GoToPoint(Vector2 point, bool startPoint)
+		//public void GoToPoint(double pointX, double pointY, bool startPoint)
 		{
             pathDone = false;
-            Out.WriteLine("Next point: [" + pointX + " , " + pointY + "]");
+			Out.WriteLine("Next point: [" + point.X + " , " + point.Y + "]");
 			
             //Go to point specified
             if (startPoint == true)
             {
-				//point -= robotPosition;
-                pointX -= X;
-                pointY -= Y;
+				point -= robotPosition;
+				//pointX -= X;
+				//pointY -= Y;
 
-                double distance = Math.Sqrt(Math.Pow(pointX, 2) + Math.Pow(pointY, 2));
-                double angle = Util.NormalRelativeAngle(Math.Atan2(pointX, pointY) - HeadingRadians);
+				double distance = Math.Sqrt(Math.Pow(point.X, 2) + Math.Pow(point.Y, 2));
+				double angle = Util.NormalRelativeAngle(Math.Atan2(point.X, point.Y) - HeadingRadians);
 
                 double turnAngle = Math.Atan(Math.Tan(angle));
                 SetTurnRightRadians(turnAngle);
@@ -153,13 +154,13 @@ namespace PG4500_2015_Innlevering2
             }
             else
             {
-                double angle = Util.NormalRelativeAngle(Math.Atan2((pointX*50), (pointY*50)) - HeadingRadians);
+				double angle = Util.NormalRelativeAngle(Math.Atan2((point.X * 50), (point.Y * 50)) - HeadingRadians);
                 double turnAngle = Math.Atan(Math.Tan(angle));
                 WaitFor(new TurnCompleteCondition(this));
                 
             }
                 
-            if (X == pointX && Y == pointY)
+			if (X == point.X && Y == point.Y)
             {
                 pathDone = true;
             }
@@ -236,7 +237,7 @@ namespace PG4500_2015_Innlevering2
 				//queuedNodes.RemoveAt(0);
 
 
-                Out.WriteLine("CurrentNode: ["+current.X+ ","+current.Y+"]");
+				Out.WriteLine("CurrentNode: [" + current.X + "," + current.Y + "]");
 
 				Node currentNode = bottomLeft[current.Y, current.X];
 				//Node currentNode = bottomLeft[currentY, currentX];
@@ -363,9 +364,9 @@ namespace PG4500_2015_Innlevering2
 				for (int i = 0; i < neighbours.Count; i++)
 					foreach (Vector2 neighbourCoord in neighbours)
 				{
-				Node neighbour = bottomLeft[neighbours[i].Y,neighbours[i].X];
+						Node neighbour = bottomLeft[neighbours[i].Y, neighbours[i].X];
 				neighbour.GScore = currentNode.GScore + neighbour.Cost;
-				neighbour.HScore = CalculateHScore(neighbourCoord,target);
+						neighbour.HScore = CalculateHScore(neighbourCoord, target);
 				}
 				//for (int i = 0; i < neighbours.Count; i += 2)
 				//{
@@ -399,8 +400,9 @@ namespace PG4500_2015_Innlevering2
 						//i -= 2;
 					}
 				}
-				CurrentX = current.X;
-				CurrentY = current.Y;
+				Current = current;
+				//CurrentX = currentX;
+				//CurrentY = currentY;
                // Out.WriteLine("Stop Point 8 (inside whileLoop)");
 			}
 			return false;
@@ -428,7 +430,7 @@ namespace PG4500_2015_Innlevering2
 			{
 				//   Out.WriteLine("Stop Point 2 (inside SortNode())");
 				Node n1 = map[list[i].Y, list[i].X];
-				Node n2 = map[list[i+1].Y, list[i+1].X];
+				Node n2 = map[list[i + 1].Y, list[i + 1].X];
 				//  Out.WriteLine("Stop Point 3 (inside SortNode())");
 				//preliminarily a primitive bubble sort.
 				if (n1.FScore > n2.FScore)
@@ -449,7 +451,7 @@ namespace PG4500_2015_Innlevering2
 
         public override void OnPaint(IGraphics graphics)
         {
-            graphics.FillRectangle(Brushes.Red, CurrentX * 50, CurrentY * 50, 50, 50);
+			graphics.FillRectangle(Brushes.Red, Current.X * 50, Current.Y * 50, 50, 50);
             if (paintPath)
         {
             
