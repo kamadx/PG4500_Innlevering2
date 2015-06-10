@@ -81,7 +81,7 @@ namespace PG4500_2015_Innlevering2
 			//nodeY = 25;
 			DebugProperty["Headed to coord"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
 			DebugProperty["Headed to Tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
-			GoToPoint(nodeX, nodeY, true);
+			GoToPoint(node.X,node.Y, true);
 			WaitFor(new MoveCompleteCondition(this));
             pathDone = true;
 			Out.WriteLine("#{0}\t{1}", Time, "Arrived at (" + X.ToString() + "," + Y.ToString() + ").");
@@ -99,7 +99,7 @@ namespace PG4500_2015_Innlevering2
 				{
 					if (enemyStopped && pathDone)
 					{
-						DebugProperty["Headed to coord"] = "(" + nodeX.ToString() + "," + nodeY.ToString() + ")";
+						DebugProperty["Headed to coord"] = "(" + node.X.ToString() + "," + node.Y.ToString() + ")";
 						// DebugProperty["Headed to tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
 						Out.WriteLine("Starting FindPath()");
 						if (FindPath(robotPosition, node))
@@ -168,7 +168,7 @@ namespace PG4500_2015_Innlevering2
 			
 		}
 
-		public bool FindPath(Vector2 start, Vector2 target)
+		private bool FindPath(Vector2 start, Vector2 target)
 		//public bool FindPath(int startX, int startY, int targetX, int targetY)
 		{
             //Out.WriteLine("Stop Point 1");
@@ -399,8 +399,8 @@ namespace PG4500_2015_Innlevering2
 						//i -= 2;
 					}
 				}
-				//CurrentX = currentX;
-				//CurrentY = currentY;
+				CurrentX = current.X;
+				CurrentY = current.Y;
                // Out.WriteLine("Stop Point 8 (inside whileLoop)");
 			}
 			return false;
@@ -506,8 +506,8 @@ namespace PG4500_2015_Innlevering2
 
 
 			// Calculate the coordinates of the robot
-			nodeX = (int)(robotStatus.X + Math.Sin(angle) * e.Distance);
-			nodeY = (int)(robotStatus.Y + Math.Cos(angle) * e.Distance);
+			node.X = (int)(robotStatus.X + Math.Sin(angle) * e.Distance);
+			node.Y = (int)(robotStatus.Y + Math.Cos(angle) * e.Distance);
 		}
 	}
 }
