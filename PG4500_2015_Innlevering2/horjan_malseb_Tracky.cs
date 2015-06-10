@@ -52,6 +52,7 @@ namespace PG4500_2015_Innlevering2
 		private Vector2 robotPosition;
 		private const int tilesize = 50;
 		private const int mapWidth = 16, mapHeight = 12;
+		private const Vector2 centerOfTile = new Vector2(25, 25);
 		private bool enemyStopped;
 		private bool paintPath;
 		private bool pathDone;
@@ -106,12 +107,14 @@ namespace PG4500_2015_Innlevering2
 		private void GoToPoint(Vector2 point)
 		{
 			pathDone = false;
+			point *= 50;
 			point -= robotPosition;
+			point += centerOfTile;
             int pointX = ((point.X * 50) + 25);
             int pointY = ((point.Y * 50) + 25);
 
-			double distance = Math.Sqrt(Math.Pow(pointX, 2) + Math.Pow(pointY, 2));
-			double angle = Util.NormalRelativeAngle(Math.Atan2(pointX, pointY) - HeadingRadians);
+			double distance = Math.Sqrt(Math.Pow(point.X, 2) + Math.Pow(point.Y, 2));
+			double angle = Util.NormalRelativeAngle(Math.Atan2(point.X, point.Y) - HeadingRadians);
 
 			double turnAngle = Math.Atan(Math.Tan(angle));
 			SetTurnRightRadians(turnAngle);
