@@ -250,6 +250,10 @@ namespace PG4500_2015_Innlevering2
 						i -= 2;
 					}
 				}
+				foreach (Node neighbour in neighbours)
+				{
+					Out.WriteLine("node exists. If this throws errors neighbour check is wrong.");
+				}
 				#endregion
                 Out.WriteLine("Stop Point 5 (inside whileLoop)");
 				#region Calculate distance
