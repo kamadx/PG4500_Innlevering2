@@ -59,8 +59,8 @@ namespace PG4500_2015_Innlevering2
 		//new
 		//private Node[,] checkedNodes = new Node[mapHeight, mapWidth];
 		//private int[,] uncheckedNodes = new int[mapWidth, mapHeight];
-		private Queue<int> queuedNodes = new Queue<int>();
-		
+		private List<int> queuedNodes = new List<int>();
+
 		private bool visited = false;
 		private int gScore, fScore;
 
@@ -479,21 +479,25 @@ namespace PG4500_2015_Innlevering2
 
 
             startNode.Visited = true;
-
+			startNode.GScore = startNode.Cost;
+			startNode.HScore = CalculateHScore(startX, startY, targetX, targetY);
+			
 			//this ain't right!
 			//queuedNodes.Enqueue(startNode);
 
 			//this is.
-			queuedNodes.Enqueue(startY);
-			queuedNodes.Enqueue(startX);
+			queuedNodes.Add(startY);
+			queuedNodes.Add(startX);
 
 			//collisionMap[startY, startX].Visited = true;
 
 			while (queuedNodes.Count > 0)
 			{
-				//since we're queueing the coords, we need them.
-				int currentY = queuedNodes.Dequeue();
-				int currentX = queuedNodes.Dequeue();
+				//Acting sort of like a queue.
+				int currentY = queuedNodes[0];
+				int currentX = queuedNodes[1];
+				queuedNodes.RemoveAt(0);
+				queuedNodes.RemoveAt(0);
 
 				Node currentNode = bottomLeft[currentY, currentX];
 				if (currentNode == targetNode)
@@ -577,18 +581,19 @@ namespace PG4500_2015_Innlevering2
 
                 #region Distance
                 //H Cost - Diagonal Distance
-				currentNode.HScore = FindHScore(targetX, targetY, currentY, currentX);
+				//currentNode.HScore = CalculateHScore(currentX, currentY, targetX, targetY);
 
 				//calculate distance by A* method
 				for (int i = 0; i < neighbours.Count; i+= 2)
 				{
 					Node neighbour = bottomLeft[neighbours[i], neighbours[i + 1]];
 					neighbour.GScore = currentNode.GScore + neighbour.Cost;
-					neighbour.HScore = FindHScore(targetX, targetY, neighbours[i], neighbours[i + 1]);
+					neighbour.HScore = CalculateHScore(neighbours[i + 1], neighbours[i], targetX, targetY);
 				}
 				#endregion
 
-				//sort neighbors.
+				//sort nodes by FCost.
+				
 			}
 			return false;
 			#region PSEUDO
@@ -642,7 +647,7 @@ namespace PG4500_2015_Innlevering2
 			#endregion
 		}
 
-		private double FindHScore(int targetX, int targetY, int currentY, int currentX)
+		private double CalculateHScore(int currentX, int currentY, int targetX, int targetY)
 		{
 			int dMax = Math.Max(Math.Abs(currentX - targetX), Math.Abs(currentY - targetY));
 			int dMin = Math.Min(Math.Abs(currentX - targetX), Math.Abs(currentY - targetY));
