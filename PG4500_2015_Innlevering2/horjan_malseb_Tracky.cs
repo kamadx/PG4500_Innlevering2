@@ -52,7 +52,7 @@ namespace PG4500_2015_Innlevering2
 		private Vector2 robotPosition;
 		private const int tilesize = 50;
 		private const int mapWidth = 16, mapHeight = 12;
-		private const Vector2 centerOfTile = new Vector2(25, 25);
+		private readonly Vector2 centerOfTile = new Vector2(25, 25);
 		private bool enemyStopped;
 		private bool paintPath;
 		private bool pathDone;
@@ -122,7 +122,7 @@ namespace PG4500_2015_Innlevering2
 			SetAhead(distance * (angle == turnAngle ? 1 : -1));
 			Execute();
 
-			if (X == pointX && Y == pointY)
+			if (X == point.X && Y == point.Y)
 			{
 				pathDone = true;
 			}
