@@ -47,7 +47,7 @@ namespace PG4500_2015_Innlevering2
 
 		//Path Queue for reading path
 		private Stack<Vector2> pathStack = new Stack<Vector2>();
-        List<Rectangle> pathRect = new List<Rectangle>();
+		List<Rectangle> pathRect = new List<Rectangle>();
 
 
 		//Point to go to.
@@ -58,7 +58,7 @@ namespace PG4500_2015_Innlevering2
 		// private const int found = 1, nonexistent = 2;
 		private bool enemyStopped;
 		private bool paintPath;
-        private bool pathDone;
+		private bool pathDone;
 
 
 
@@ -66,8 +66,8 @@ namespace PG4500_2015_Innlevering2
 
 		public override void Run()
 		{
-            pathDone = false;
-            IsAdjustGunForRobotTurn = true;
+			pathDone = false;
+			IsAdjustGunForRobotTurn = true;
 			paintPath = false;
 			SetColors(Color.LightBlue, Color.Blue, Color.Tan, Color.Yellow, Color.Tan);
 			enemyStopped = false;
@@ -75,9 +75,9 @@ namespace PG4500_2015_Innlevering2
 			robotPosition = new Vector2((int)X, (int)Y);
 			DebugProperty["Headed to coord"] = "(" + node.X.ToString() + "," + node.Y.ToString() + ")";
 			DebugProperty["Headed to Tile"] = "(" + node.X / tilesize + "," + node.Y / tilesize + ")";
-			GoToPoint(node, true);
+			GoToPoint(node);
 			WaitFor(new MoveCompleteCondition(this));
-            pathDone = true;
+			pathDone = true;
 			Out.WriteLine("#{0}\t{1}", Time, "Arrived at (" + X.ToString() + "," + Y.ToString() + ").");
 			//SetTurnRight(180);
 
@@ -93,11 +93,11 @@ namespace PG4500_2015_Innlevering2
 				{
 					if (enemyStopped && pathDone == true)
 					{
-                        paintPath = false;
+						paintPath = false;
 						DebugProperty["Headed to coord"] = "(" + node.X.ToString() + "," + node.Y.ToString() + ")";
 						// DebugProperty["Headed to tile"] = "(" + nodeX / tilesize + "," + nodeY / tilesize + ")";
 						Out.WriteLine("Starting FindPath()");
-                        FindPath(new Vector2((int)X, (int)Y), node);
+						FindPath(new Vector2((int)X, (int)Y), node);
 
 
 					}
@@ -108,42 +108,25 @@ namespace PG4500_2015_Innlevering2
 		}
 
 		//Instructs the robot to move to a specific place.
-		private void GoToPoint(Vector2 point, bool startPoint)
+		private void GoToPoint(Vector2 point)
 		//public void GoToPoint(double pointX, double pointY, bool startPoint)
 		{
-            pathDone = false;
-			//Out.WriteLine("Next point: [" + point.X + " , " + point.Y + "]");
+			pathDone = false;
+			point -= robotPosition;
 
-			//Go to point specified
-			if (startPoint == true)
+			double distance = Math.Sqrt(Math.Pow(point.X, 2) + Math.Pow(point.Y, 2));
+			double angle = Util.NormalRelativeAngle(Math.Atan2(point.X, point.Y) - HeadingRadians);
+
+			double turnAngle = Math.Atan(Math.Tan(angle));
+			SetTurnRightRadians(turnAngle);
+			WaitFor(new TurnCompleteCondition(this));
+			SetAhead(distance * (angle == turnAngle ? 1 : -1));
+			Execute();
+
+			if (X == point.X && Y == point.Y)
 			{
-				point -= robotPosition;
-
-				double distance = Math.Sqrt(Math.Pow(point.X, 2) + Math.Pow(point.Y, 2));
-				double angle = Util.NormalRelativeAngle(Math.Atan2(point.X, point.Y) - HeadingRadians);
-
-				double turnAngle = Math.Atan(Math.Tan(angle));
-				SetTurnRightRadians(turnAngle);
-				WaitFor(new TurnCompleteCondition(this));
-				SetAhead(distance * (angle == turnAngle ? 1 : -1));
-				Execute();
+				pathDone = true;
 			}
-			else
-			{
-				double angle = Util.NormalRelativeAngle(Math.Atan2((point.X * 50), (point.Y * 50)) - HeadingRadians);
-				double turnAngle = Math.Atan(Math.Tan(angle));
-                SetTurnGunRightRadians(Util.NormalRelativeAngle(turnAngle));
-				WaitFor(new TurnCompleteCondition(this));
-
-                SetAhead(50f * (angle == turnAngle ? 1 : -1));
-                Execute();
-
-			}
-
-            //if (X == point.X && Y == point.Y)
-            //{
-            //    pathDone = true;
-            //}
 
 
 
@@ -151,7 +134,7 @@ namespace PG4500_2015_Innlevering2
 
 		private bool FindPath(Vector2 start, Vector2 target)
 		{
-            //pathDone = false;
+			//pathDone = false;
 			//Out.WriteLine("Stop Point 1");
 			//Empty the queue to avoid errors.
 			queuedNodes.Clear();
@@ -198,9 +181,9 @@ namespace PG4500_2015_Innlevering2
 				if (currentNode == targetNode)
 				{
 					//We arrived!
-                    Out.WriteLine("WE DID IT, REDDIT!");
+					Out.WriteLine("WE DID IT, REDDIT!");
 					makePath(start, current, bottomLeft);
-                   
+
 					return true;
 				}
 				//Set current node as a visited node.
@@ -277,7 +260,7 @@ namespace PG4500_2015_Innlevering2
 						neighbour.Parent = current;
 					}
 					neighbour.HScore = CalculateHScore(neighbourCoord, target);
-					
+
 				}
 				#endregion
 
@@ -290,7 +273,7 @@ namespace PG4500_2015_Innlevering2
 				for (int i = 0; i < queuedNodes.Count - 1; i++)
 				{
 					for (int j = i + 1; j < queuedNodes.Count; j++)
-					{ 
+					{
 						if (queuedNodes[i] == queuedNodes[j])
 						{
 							queuedNodes.RemoveAt(j);
@@ -298,26 +281,26 @@ namespace PG4500_2015_Innlevering2
 						}
 					}
 				}
-                //Scan();
+				//Scan();
 			}
 			return false;
 		}
 		private void makePath(Vector2 start, Vector2 target, Node[,] map)
-        {
-            pathRect.Clear();
-            //Stack<Vector2> path = new Stack<Vector2>();
-            pathStack.Push(target);
-            while (map[target.Y,target.X].Parent != start)
-            {
-                target = map[target.Y,target.X].Parent;
-                pathRect.Add(new Rectangle(target.X, target.Y, 50, 50));
-                pathStack.Push(target);
-            }
-            paintPath = true;
-            ReadPath();
+		{
+			pathRect.Clear();
+			//Stack<Vector2> path = new Stack<Vector2>();
+			pathStack.Push(target);
+			while (map[target.Y, target.X].Parent != start)
+			{
+				target = map[target.Y, target.X].Parent;
+				pathRect.Add(new Rectangle(target.X, target.Y, 50, 50));
+				pathStack.Push(target);
+			}
+			paintPath = true;
+			ReadPath();
 
 
-        }
+		}
 
 
 		private double CalculateHScore(Vector2 current, Vector2 target)
@@ -335,7 +318,7 @@ namespace PG4500_2015_Innlevering2
 			{
 				Node n1 = map[list[i].Y, list[i].X];
 				Node n2 = map[list[i + 1].Y, list[i + 1].X];
-                
+
 				//preliminarily a primitive bubble sort.
 				if (n1.FScore > n2.FScore)
 				{
@@ -347,34 +330,34 @@ namespace PG4500_2015_Innlevering2
 		}
 
 
-        //THIS SHIT AINT WORKING >:[
+		//THIS SHIT AINT WORKING >:[
 
-        //public override void OnPaint(IGraphics graphics)
-        //{
-        //    //graphics.FillRectangle(Brushes.Red, Current.X * 50, Current.Y * 50, 50, 50);
-        //    if (paintPath)
-        //    {
-        //        Out.WriteLine("WHY YOU NO PAINT?!");
-        //            for (int i = 0; i > pathRect.Count; i++)
-        //            {
-        //                Out.WriteLine("ARE YOU FUCKING PAINTING?");
-        //                graphics.FillRectangle(Brushes.Red, pathRect[i]);
-        //            }
-        //    }
+		//public override void OnPaint(IGraphics graphics)
+		//{
+		//    //graphics.FillRectangle(Brushes.Red, Current.X * 50, Current.Y * 50, 50, 50);
+		//    if (paintPath)
+		//    {
+		//        Out.WriteLine("WHY YOU NO PAINT?!");
+		//            for (int i = 0; i > pathRect.Count; i++)
+		//            {
+		//                Out.WriteLine("ARE YOU FUCKING PAINTING?");
+		//                graphics.FillRectangle(Brushes.Red, pathRect[i]);
+		//            }
+		//    }
 
-        //}
+		//}
 
 		private void ReadPath()
 		{
-            Vector2 temp;
-            while (pathStack.Count > 0)
-            {
-                temp = pathStack.Pop();
-                GoToPoint(temp, true);
-                Out.WriteLine("Next Point: [" + temp.X + "," + temp.Y + "]");
-            }
-            pathDone = true;
-            
+			Vector2 temp;
+			while (pathStack.Count > 0)
+			{
+				temp = pathStack.Pop();
+				GoToPoint(temp);
+				Out.WriteLine("Next Point: [" + temp.X + "," + temp.Y + "]");
+			}
+			pathDone = true;
+
 		}
 
 		public int ReadPathX(int pathLocation)
