@@ -52,8 +52,8 @@ namespace PG4500_2015_Innlevering2
 
 		//Point to go to.
 		private int nodeX, nodeY;
-		private Vector2 node;
-		private Vector2 robotPosition;
+		//private Vector2 node;
+		//private Vector2 robotPosition;
 		private const int tilesize = 50;
 		private const int mapWidth = 16, mapHeight = 12;
 		// private const int found = 1, nonexistent = 2;
